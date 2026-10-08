@@ -211,6 +211,20 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
 html { color-scheme: light; }
 body { margin: 0; }
 img { max-width: 100%; }
+  <section id="flyer">
+    <p class="kicker reveal">Spread the word</p>
+    <h2 class="reveal">Sign up for AI Scholars</h2>
+    <div class="flyer">
+      <img class="reveal" src="flyer.jpg" alt="AI Scholars flyer with the Brookline High School Spartan logo and a QR code to sign up" width="1545" height="1999" loading="lazy">
+      <div class="reveal">
+        <p class="intro">Scan the code on the flyer or use the button below to fill out the sign-up form. Share the flyer with friends or print it for the hallway.</p>
+        <div class="btns">
+          <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up now</a>
+          <a class="btn outline" href="flyer.jpg" download>Download the flyer</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </style>
 </head>
 <body>
@@ -388,7 +402,13 @@ ASK about chemiosmosis on quiz??</pre>
     </div>
   </section>
 
-  <section id="join">
+  .flyer { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px; align-items: center; }
+.flyer img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px rgba(19,41,75,0.2); transition: transform .3s; }
+.flyer img:hover { transform: rotate(-1.5deg) scale(1.02); }
+.flyer .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn.outline { color: var(--fg); border: 1px solid var(--line); background: var(--surface); }
+@media (max-width: 640px) { .flyer { grid-template-columns: 1fr; } }
+   <section id="join">
     <div class="join reveal">
       <h2>Join AI Scholars</h2>
       <p>Anyone at BHS can join, whether you've never used AI or use it every day. Join our WhatsApp group for meeting updates, follow us on Instagram, or just show up to a meeting.</p>
