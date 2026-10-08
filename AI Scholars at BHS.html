@@ -1,0 +1,301 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AI Scholars at BHS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..800&family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: sticky nav, a navy hero band with a red rule, then single-column sections at ~960px; schedule as a table, project timeline as a stepped list */
+:root {
+  --bg: #f6f7fa; --surface: #ffffff; --fg: #17203a; --muted: #56607a; --line: #d9dee9;
+  --navy: #13294b; --on-navy: #ffffff; --on-navy-muted: #b9c4dc;
+  --red: #c8102e; --red-soft: #fbe8eb; --chip: #eef1f7;
+  --display: "Archivo", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+  --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1424; --surface: #151f36; --fg: #e5e9f2; --muted: #9ba6c0; --line: #2a3654;
+  --navy: #0a1a36; --on-navy: #ffffff; --on-navy-muted: #a9b6d2;
+  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d1424; --surface: #151f36; --fg: #e5e9f2; --muted: #9ba6c0; --line: #2a3654;
+  --navy: #0a1a36; --on-navy: #ffffff; --on-navy-muted: #a9b6d2;
+  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942; color-scheme: dark }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+a { color: var(--red); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* Nav */
+header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--navy); border-bottom: 3px solid var(--red); }
+header.nav .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding-block: 10px; }
+.brand { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: 1.15rem; color: var(--on-navy); text-decoration: none; letter-spacing: 0.01em; }
+.brand span { color: var(--red); }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+nav a { color: var(--on-navy-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+nav a:hover { color: var(--on-navy); }
+
+/* Hero */
+.hero { background: var(--navy); color: var(--on-navy); }
+.hero .wrap { padding-block: 56px 60px; display: grid; gap: 18px; }
+.eyebrow { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--on-navy-muted); margin: 0; }
+.hero h1 { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.6rem, 8vw, 4.5rem); line-height: 0.98; margin: 0; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--red); }
+.hero p.lead { font-size: 1.15rem; max-width: 58ch; margin: 0; color: var(--on-navy-muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; padding: 0; list-style: none; }
+.facts li { border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 14px; font-size: 0.9rem; font-weight: 600; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.btn { display: inline-block; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 6px; }
+.btn.primary { background: var(--red); color: #ffffff; }
+.btn.ghost { color: var(--on-navy); border: 1px solid rgba(255,255,255,0.4); }
+
+/* Sections */
+section { padding-block: 56px 8px; scroll-margin-top: 70px; }
+h2 { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: clamp(1.7rem, 4vw, 2.2rem); line-height: 1.1; margin: 0 0 6px; text-wrap: balance; }
+.kicker { color: var(--red); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 6px; }
+.intro { color: var(--muted); max-width: 64ch; margin: 0 0 24px; }
+h3 { font-size: 1.05rem; margin: 0 0 4px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; min-width: 0; }
+.tile p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+.mission { font-size: 1.2rem; line-height: 1.5; max-width: 62ch; border-left: 4px solid var(--red); padding-left: 18px; margin: 0 0 28px; }
+
+/* Schedule */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--chip); }
+tbody tr:last-child td { border-bottom: 0; }
+td.num { font-variant-numeric: tabular-nums; color: var(--muted); width: 2.5em; }
+td.date { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+td.topic { font-weight: 700; }
+td.lead { color: var(--muted); white-space: nowrap; }
+tr.next { background: var(--red-soft); }
+tr.next td.topic::after { content: "Next up"; margin-left: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; background: var(--red); border-radius: 999px; padding: 2px 8px; vertical-align: 2px; }
+tr.done td { color: var(--muted); }
+.fine { color: var(--muted); font-size: 0.88rem; margin: 10px 0 0; }
+
+/* Project */
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; align-items: start; }
+.split > * { min-width: 0; }
+ul.checks { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
+ul.checks li { padding-left: 26px; position: relative; }
+ul.checks li::before { content: ""; position: absolute; left: 4px; top: 0.55em; width: 10px; height: 10px; border-radius: 2px; background: var(--red); }
+ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+ol.steps li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
+ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--on-navy); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+ol.steps li::after { content: ""; position: absolute; left: 14px; top: 32px; bottom: 2px; width: 2px; background: var(--line); }
+ol.steps li:last-child::after { display: none; }
+ol.steps .when { display: block; font-size: 0.82rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; }
+ol.steps strong { display: block; }
+ol.steps span.what { color: var(--muted); font-size: 0.95rem; }
+
+/* Team */
+.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.person { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; gap: 12px; align-items: center; min-width: 0; }
+.avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--on-navy); display: grid; place-items: center; font-family: var(--display); font-weight: 800; }
+.person .role { color: var(--muted); font-size: 0.88rem; line-height: 1.35; }
+
+/* Join */
+.join { background: var(--navy); color: var(--on-navy); border-radius: 10px; padding: 28px; display: grid; gap: 14px; }
+.join h2 { color: var(--on-navy); }
+.join p { margin: 0; color: var(--on-navy-muted); max-width: 60ch; }
+.join dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 6px 0 0; }
+.join dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--on-navy-muted); }
+.join dd { margin: 0; font-weight: 700; color: var(--on-navy); }
+
+/* Rules */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+
+footer { margin-top: 64px; border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+.foot-links { display: flex; gap: 18px; }
+.foot-links a { color: var(--muted); font-weight: 600; }
+.foot-links a:hover { color: var(--red); }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.link-btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; padding: 11px 18px; border-radius: 6px; color: #ffffff; }
+.link-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+.link-btn.wa { background: #1f8a4c; }
+.link-btn.ig { background: transparent; border: 1px solid rgba(255,255,255,0.45); }
+.link-btn:hover { filter: brightness(1.1); }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">AI <span>Scholars</span></a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#project">Project</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#join">Join</a></li>
+        <li><a href="#members">Members</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">A Brookline High School club</p>
+    <h1>Study smarter with <em>AI</em>.</h1>
+    <p class="lead">AI Scholars teaches BHS students to turn class notes into study guides, make practice quizzes, organize their classes, and build their own learning websites, while using AI honestly and within school rules.</p>
+    <ul class="facts">
+      <li>Every week</li>
+      <li>X block, 45 min</li>
+      <li>No experience needed</li>
+    </ul>
+    <div class="cta">
+      <a class="btn primary" href="#join">How to join</a>
+      <a class="btn ghost" href="#schedule">See the schedule</a>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section id="about">
+    <p class="kicker">About</p>
+    <h2>Use AI to understand, not to shortcut</h2>
+    <p class="mission">We teach BHS students how to use AI tools to study smarter, focusing on using AI to actually understand material, responsibly and within school rules.</p>
+    <div class="grid">
+      <div class="tile"><h3>Study guides</h3><p>Turn a unit's notes into a clear guide, then check it for mistakes.</p></div>
+      <div class="tile"><h3>Quizzes and flashcards</h3><p>Make practice tests before exams and learn to spot bad questions.</p></div>
+      <div class="tile"><h3>Organized classes</h3><p>Keep each class's syllabus and notes in one place you can ask questions about.</p></div>
+      <div class="tile"><h3>Build things</h3><p>Learn vibe coding and Claude Code, then build a learning website with your group.</p></div>
+    </div>
+  </section>
+
+  <section id="schedule">
+    <p class="kicker">Fall semester</p>
+    <h2>Weekly schedule</h2>
+    <p class="intro">Twelve sessions from late October to early February. We skip Thanksgiving week and winter break.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Week of</th><th>Topic</th><th>What we do</th><th>Lead</th></tr></thead>
+        <tbody id="sched">
+          <tr data-date="2026-10-26"><td class="num">1</td><td class="date">Oct 26</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden</td></tr>
+          <tr data-date="2026-11-02"><td class="num">2</td><td class="date">Nov 2</td><td class="topic">Prompting that works</td><td>Ask one question three ways and compare</td><td class="lead">Guy</td></tr>
+          <tr data-date="2026-11-09"><td class="num">3</td><td class="date">Nov 9</td><td class="topic">Study guides from your notes</td><td>Turn real notes into a guide; check for errors</td><td class="lead">Guy</td></tr>
+          <tr data-date="2026-11-16"><td class="num">4</td><td class="date">Nov 16</td><td class="topic">Practice quizzes and flashcards</td><td>Make a quiz, take it in pairs, spot bad questions</td><td class="lead">Jayden</td></tr>
+          <tr data-date="2026-11-30"><td class="num">5</td><td class="date">Nov 30</td><td class="topic">Organizing classes with Projects</td><td>One project per class with syllabus and notes</td><td class="lead">Guy</td></tr>
+          <tr data-date="2026-12-07"><td class="num">6</td><td class="date">Dec 7</td><td class="topic">Spot the mistake + AI ethics</td><td>Find errors; debate where AI helps or hurts learning</td><td class="lead">Jayden</td></tr>
+          <tr data-date="2026-12-14"><td class="num">7</td><td class="date">Dec 14</td><td class="topic">Intro to vibe coding</td><td>Build a tiny study tool by describing it</td><td class="lead">Jayden</td></tr>
+          <tr data-date="2027-01-04"><td class="num">8</td><td class="date">Jan 4</td><td class="topic">Building with Claude Code</td><td>Demo; kick off the website project</td><td class="lead">Iddo, Vid</td></tr>
+          <tr data-date="2027-01-11"><td class="num">9</td><td class="date">Jan 11</td><td class="topic">Midterm prep sprint</td><td>Build a review plan and quiz set for one test</td><td class="lead">Guy, Jayden</td></tr>
+          <tr data-date="2027-01-18"><td class="num">10</td><td class="date">Jan 18</td><td class="topic">Reusable instructions and skills</td><td>Write a "quiz me" or "explain like a tutor" setup</td><td class="lead">Guy</td></tr>
+          <tr data-date="2027-01-25"><td class="num">11</td><td class="date">Jan 25</td><td class="topic">Website project work session</td><td>Plan pages and features in groups</td><td class="lead">Iddo, Vid, Jayden</td></tr>
+          <tr data-date="2027-02-01"><td class="num">12</td><td class="date">Feb 1</td><td class="topic">Show-and-tell and spring planning</td><td>Members demo their work</td><td class="lead">Guy, Jayden</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fine">Dates may shift around the BHS calendar.</p>
+  </section>
+
+  <section id="project">
+    <p class="kicker">Main project</p>
+    <h2>Build a learning website with your group</h2>
+    <p class="intro">Groups of 2–3 design and build a website that helps students learn a topic from a BHS class, like a biology unit, a history period, or Spanish vocabulary. You'll use vibe coding and Claude Code and learn how websites work along the way. At the end, every group presents at a showcase.</p>
+    <div class="split">
+      <div>
+        <h3>Every site includes</h3>
+        <ul class="checks">
+          <li>A clear explanation of the topic, written and fact-checked by the group</li>
+          <li>At least one interactive feature: a quiz, flashcards, or a review game</li>
+          <li>A clean design that works on a phone</li>
+          <li>A "How we built it" page about what AI did and didn't do</li>
+        </ul>
+        <h3>Project rules</h3>
+        <ul class="checks">
+          <li>Every member can explain how their site works</li>
+          <li>Content is accurate and original</li>
+          <li>Builds use the advisor's account or school-approved tools</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Timeline</h3>
+        <ol class="steps">
+          <li><span class="when">Week of Jan 4</span><strong>Kickoff</strong><span class="what">Claude Code demo and topic brainstorm</span></li>
+          <li><span class="when">Week of Jan 11</span><strong>Form groups</strong><span class="what">Groups of 2–3 pick a class topic</span></li>
+          <li><span class="when">Jan 18–25</span><strong>Plan</strong><span class="what">Sketch pages and features; leads approve plans</span></li>
+          <li><span class="when">Feb 1 – Mar 5</span><strong>Build the first version</strong><span class="what">Get the topic explanation working</span></li>
+          <li><span class="when">Week of Mar 8</span><strong>Midpoint check-in</strong><span class="what">2-minute progress demos and feedback</span></li>
+          <li><span class="when">Mar 15 – Apr 9</span><strong>Add interactive features</strong><span class="what">Quiz, flashcards, or game, plus "How we built it"</span></li>
+          <li><span class="when">Apr 12 and Apr 26</span><strong>Fact-check and test</strong><span class="what">Check every fact; swap sites with another group</span></li>
+          <li><span class="when">May 3–10</span><strong>Final fixes</strong><span class="what">Fix bugs and polish the design</span></li>
+          <li><span class="when">Week of May 17</span><strong>Showcase</strong><span class="what">Present to the club, advisor, and invited teachers</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <p class="kicker">Officers</p>
+    <h2>Who runs AI Scholars</h2>
+    <p class="intro">All officers are in 10th grade. Workshop leads teach the sessions in their area.</p>
+    <div class="team">
+      <div class="person"><div class="avatar" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-president · Website designer · Workshop lead: Claude for files and tasks</div></div></div>
+      <div class="person"><div class="avatar" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-president · Workshop lead: vibe coding</div></div></div>
+      <div class="person"><div class="avatar" aria-hidden="true">IS</div><div><h3>Iddo Shubert</h3><div class="role">Outreach · Workshop lead: Claude Code</div></div></div>
+      <div class="person"><div class="avatar" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Secretary · Website designer · Workshop lead: Claude Code</div></div></div>
+      <div class="person"><div class="avatar" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Secretary</div></div></div>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="join">
+      <h2>Join AI Scholars</h2>
+      <p>Anyone at BHS can join, whether you've never used AI or use it every day. Join our WhatsApp group for meeting updates, follow us on Instagram, or just show up to a meeting.</p>
+      <dl>
+        <div><dt>When</dt><dd>Every week, X block</dd></div>
+        <div><dt>How long</dt><dd>45 minutes</dd></div>
+        <div><dt>Where</dt><dd>Room coming soon</dd></div>
+        <div><dt>First meeting</dt><dd>Week of Oct 26</dd></div>
+      </dl>
+      <div class="links">
+        <a class="link-btn wa" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>Join the WhatsApp group</a>
+        <a class="link-btn ig" href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9a6.6 6.6 0 0 0-1.8-4.7A6.6 6.6 0 0 0 15.4 1.4C13.6 1.3 10.4 1.3 8.6 1.4a6.6 6.6 0 0 0-4.7 1.8A6.6 6.6 0 0 0 2.1 7.9c-.1 1.8-.1 7.2 0 9a6.6 6.6 0 0 0 1.8 4.7 6.6 6.6 0 0 0 4.7 1.8c1.8.1 7.2.1 9 0a6.6 6.6 0 0 0 4.7-1.8 6.6 6.6 0 0 0 1.8-4.7c.1-1.8.1-7.2 0-9zm-2.2 11a3.4 3.4 0 0 1-1.9 1.9c-1.3.5-4.4.4-5.8.4s-4.5.1-5.8-.4a3.4 3.4 0 0 1-1.9-1.9c-.5-1.3-.4-4.4-.4-5.8s-.1-4.5.4-5.8a3.4 3.4 0 0 1 1.9-1.9c1.3-.5 4.4-.4 5.8-.4s4.5-.1 5.8.4a3.4 3.4 0 0 1 1.9 1.9c.5 1.3.4 4.4.4 5.8s.1 4.5-.4 5.8z"/></svg>Follow @aischolarsclub</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="members">
+    <p class="kicker">For members</p>
+    <h2>Ground rules</h2>
+    <p class="intro">Every member agrees to these. They keep the club useful and keep everyone out of trouble.</p>
+    <div class="rules">
+      <div class="tile"><h3>Follow each teacher's AI rules</h3><p>When you're not sure what's allowed, ask the teacher.</p></div>
+      <div class="tile"><h3>Learn, don't outsource</h3><p>Use AI to explain, quiz, and review. Never turn in AI-written work as your own.</p></div>
+      <div class="tile"><h3>Always check</h3><p>Compare AI answers to your notes or textbook. AI can be confidently wrong.</p></div>
+      <div class="tile"><h3>Protect privacy</h3><p>No other students' names, grades, or personal info in AI tools. Only upload class materials you're allowed to share.</p></div>
+      <div class="tile"><h3>Accounts</h3><p>Claude accounts are 18+. Club demos run from the advisor's account, and members practice with tools the school approves.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot"><span>AI Scholars · Brookline High School · 2026–27</span><span class="foot-links"><a href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener">Instagram</a><a href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">WhatsApp group</a></span></div>
+</footer>
+
+<script>
+(function () {
+  var rows = document.querySelectorAll('#sched tr');
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var marked = false;
+  rows.forEach(function (r) {
+    var p = r.getAttribute('data-date').split('-');
+    var start = new Date(+p[0], +p[1] - 1, +p[2]);
+    var end = new Date(start); end.setDate(end.getDate() + 6);
+    if (end < today) { r.classList.add('done'); }
+    else if (!marked) { r.classList.add('next'); marked = true; }
+  });
+})();
+</script>
+
+</body></html>
