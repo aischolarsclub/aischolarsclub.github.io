@@ -1,31 +1,53 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="AI Scholars: a Brookline High School club that teaches students to study smarter with AI.">
 <title>AI Scholars at BHS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..800&family=Public+Sans:wght@400;600;700&display=swap">
 <style>
-/* Layout: sticky nav, a navy hero band with a red rule, then single-column sections at ~960px; schedule as a table, project timeline as a stepped list */
+/* Layout: sticky nav, a navy hero with a live "neural" canvas and typed headline, a stats strip, then single-column sections at ~960px.
+   Interactive: "Is AI good at this?" quiz, notes-to-study-guide demo, schedule filter by lead, live next-session countdown. */
 :root {
   --bg: #f6f7fa; --surface: #ffffff; --fg: #17203a; --muted: #56607a; --line: #d9dee9;
   --navy: #13294b; --on-navy: #ffffff; --on-navy-muted: #b9c4dc;
   --red: #c8102e; --red-soft: #fbe8eb; --chip: #eef1f7;
+  --good: #1f7a46; --good-soft: #e3f3ea;
   --display: "Archivo", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
   --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0d1424; --surface: #151f36; --fg: #e5e9f2; --muted: #9ba6c0; --line: #2a3654;
   --navy: #0a1a36; --on-navy: #ffffff; --on-navy-muted: #a9b6d2;
-  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942; color-scheme: dark } }
+  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942;
+  --good: #5fd08f; --good-soft: #15301f; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #0d1424; --surface: #151f36; --fg: #e5e9f2; --muted: #9ba6c0; --line: #2a3654;
   --navy: #0a1a36; --on-navy: #ffffff; --on-navy-muted: #a9b6d2;
-  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942; color-scheme: dark }
+  --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942;
+  --good: #5fd08f; --good-soft: #15301f; color-scheme: dark }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
 .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
 a { color: var(--red); }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+button { font: inherit; cursor: pointer; }
+
+/* Motion */
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(200,16,46,.6); } 100% { box-shadow: 0 0 0 10px rgba(200,16,46,0); } }
+@keyframes pop { 0% { transform: scale(.6); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.in { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .in, .caret, .live-dot { animation: none !important; }
+}
 
 /* Nav */
 header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--navy); border-bottom: 3px solid var(--red); }
@@ -33,22 +55,36 @@ header.nav .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-
 .brand { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: 1.15rem; color: var(--on-navy); text-decoration: none; letter-spacing: 0.01em; }
 .brand span { color: var(--red); }
 nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; }
-nav a { color: var(--on-navy-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+nav a { color: var(--on-navy-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; position: relative; }
+nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
 nav a:hover { color: var(--on-navy); }
+nav a:hover::after { transform: scaleX(1); }
 
 /* Hero */
-.hero { background: var(--navy); color: var(--on-navy); }
-.hero .wrap { padding-block: 56px 60px; display: grid; gap: 18px; }
+.hero { background: var(--navy); color: var(--on-navy); position: relative; overflow: hidden; }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero .wrap { position: relative; padding-block: 64px 68px; display: grid; gap: 18px; }
 .eyebrow { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--on-navy-muted); margin: 0; }
-.hero h1 { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.6rem, 8vw, 4.5rem); line-height: 0.98; margin: 0; text-wrap: balance; }
+.hero h1 { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 0.98; margin: 0; min-height: 2em; }
 .hero h1 em { font-style: normal; color: var(--red); }
+.caret { display: inline-block; width: 0.07em; height: 0.82em; background: var(--red); margin-left: 0.05em; vertical-align: -0.04em; animation: blink 1s steps(1) infinite; }
 .hero p.lead { font-size: 1.15rem; max-width: 58ch; margin: 0; color: var(--on-navy-muted); }
 .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; padding: 0; list-style: none; }
-.facts li { border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 14px; font-size: 0.9rem; font-weight: 600; }
+.facts li { border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 14px; font-size: 0.9rem; font-weight: 600; background: rgba(10,26,54,0.5); }
+.facts li.live { border-color: var(--red); display: inline-flex; align-items: center; gap: 8px; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
-.btn { display: inline-block; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 6px; }
+.btn { display: inline-block; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 6px; transition: transform .15s, filter .15s; }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .btn.primary { background: var(--red); color: #ffffff; }
-.btn.ghost { color: var(--on-navy); border: 1px solid rgba(255,255,255,0.4); }
+.btn.ghost { color: var(--on-navy); border: 1px solid rgba(255,255,255,0.4); background: rgba(10,26,54,0.5); }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: -28px; position: relative; z-index: 1; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(19,41,75,0.08); }
+.stat b { display: block; font-family: var(--display); font-stretch: 85%; font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: 0.88rem; }
+@media (max-width: 620px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Sections */
 section { padding-block: 56px 8px; scroll-margin-top: 70px; }
@@ -58,16 +94,58 @@ h2 { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size
 h3 { font-size: 1.05rem; margin: 0 0 4px; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; min-width: 0; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; min-width: 0; transition: transform .2s, border-color .2s; }
+.tile:hover { transform: translateY(-3px); border-color: var(--red); }
 .tile p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-
+.tile .ico { width: 34px; height: 34px; border-radius: 8px; background: var(--red-soft); color: var(--red); display: grid; place-items: center; font-weight: 800; font-family: var(--display); margin-bottom: 10px; }
 .mission { font-size: 1.2rem; line-height: 1.5; max-width: 62ch; border-left: 4px solid var(--red); padding-left: 18px; margin: 0 0 28px; }
 
+/* Quiz */
+.quiz { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.q { background: var(--surface); border: 2px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; transition: border-color .25s, background .25s; }
+.q h3 { margin: 0; }
+.q .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.q .opts button { border: 1px solid var(--line); background: var(--chip); color: var(--fg); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 0.9rem; transition: transform .15s; }
+.q .opts button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--fg); }
+.q .opts button:disabled { cursor: default; opacity: 0.55; }
+.q .opts button.picked { opacity: 1; background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.q .why { margin: 0; font-size: 0.92rem; color: var(--muted); }
+.q .verdict { font-weight: 800; animation: pop .35s ease both; display: inline-block; }
+.q.right { border-color: var(--good); background: var(--good-soft); }
+.q.right .verdict { color: var(--good); }
+.q.wrong { border-color: var(--red); background: var(--red-soft); }
+.q.wrong .verdict { color: var(--red); }
+.scorebar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
+.score { font-weight: 700; }
+.ghost-btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; padding: 8px 14px; font-weight: 600; }
+.ghost-btn:hover { border-color: var(--fg); }
+
+/* Demo */
+.demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 40px; }
+.pane { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
+.pane .tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 10px; }
+.notes { font-family: var(--mono); font-size: 0.86rem; line-height: 1.7; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.guide { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; min-height: 12em; }
+.guide li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; animation: rise .45s cubic-bezier(.2,.7,.2,1) both; }
+.guide .n { width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.8rem; }
+.guide .n.flag { background: var(--red); }
+.guide b { display: block; }
+.guide span { color: var(--muted); font-size: 0.92rem; }
+.empty { color: var(--muted); font-size: 0.95rem; margin: 0; }
+.run { margin-top: 14px; background: var(--red); color: #fff; border: 0; border-radius: 6px; padding: 10px 18px; font-weight: 700; }
+.run:hover { filter: brightness(1.08); }
+.fine { color: var(--muted); font-size: 0.88rem; margin: 10px 0 0; }
+
 /* Schedule */
+.filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.filter button { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 5px 14px; font-weight: 600; font-size: 0.9rem; }
+.filter button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
 .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
-table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.95rem; }
 th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--chip); }
+tbody tr { transition: background .2s; }
+tbody tr:hover { background: var(--chip); }
 tbody tr:last-child td { border-bottom: 0; }
 td.num { font-variant-numeric: tabular-nums; color: var(--muted); width: 2.5em; }
 td.date { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -76,7 +154,7 @@ td.lead { color: var(--muted); white-space: nowrap; }
 tr.next { background: var(--red-soft); }
 tr.next td.topic::after { content: "Next up"; margin-left: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; background: var(--red); border-radius: 999px; padding: 2px 8px; vertical-align: 2px; }
 tr.done td { color: var(--muted); }
-.fine { color: var(--muted); font-size: 0.88rem; margin: 10px 0 0; }
+tr.done td.topic { text-decoration: line-through; text-decoration-color: var(--line); }
 
 /* Project */
 .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; align-items: start; }
@@ -89,15 +167,22 @@ ol.steps li { counter-increment: s; position: relative; padding: 0 0 18px 44px; 
 ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--on-navy); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 ol.steps li::after { content: ""; position: absolute; left: 14px; top: 32px; bottom: 2px; width: 2px; background: var(--line); }
 ol.steps li:last-child::after { display: none; }
+ol.steps li.now::before { background: var(--red); animation: pulse 1.6s infinite; }
+ol.steps li.past::before { background: var(--muted); }
 ol.steps .when { display: block; font-size: 0.82rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; }
 ol.steps strong { display: block; }
 ol.steps span.what { color: var(--muted); font-size: 0.95rem; }
 
 /* Team */
-.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-.person { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; gap: 12px; align-items: center; min-width: 0; }
-.avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--navy); color: var(--on-navy); display: grid; place-items: center; font-family: var(--display); font-weight: 800; }
-.person .role { color: var(--muted); font-size: 0.88rem; line-height: 1.35; }
+.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.person { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; min-width: 0; transition: transform .2s, box-shadow .2s; }
+.person:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(19,41,75,0.14); }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; transition: transform .3s; }
+.person:hover .avatar { transform: rotate(-8deg) scale(1.06); }
+.avatar.founder { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--red); }
+.person .role { color: var(--muted); font-size: 0.88rem; line-height: 1.4; }
+.leads { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.leads span { font-size: 0.75rem; font-weight: 600; background: var(--chip); border-radius: 999px; padding: 2px 9px; }
 
 /* Join */
 .join { background: var(--navy); color: var(--on-navy); border-radius: 10px; padding: 28px; display: grid; gap: 14px; }
@@ -106,6 +191,12 @@ ol.steps span.what { color: var(--muted); font-size: 0.95rem; }
 .join dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 6px 0 0; }
 .join dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--on-navy-muted); }
 .join dd { margin: 0; font-weight: 700; color: var(--on-navy); }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+.link-btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; padding: 11px 18px; border-radius: 6px; color: #ffffff; transition: transform .15s, filter .15s; }
+.link-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+.link-btn.wa { background: #1f8a4c; }
+.link-btn.ig { background: transparent; border: 1px solid rgba(255,255,255,0.45); }
+.link-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
 /* Rules */
 .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -116,81 +207,132 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
 .foot-links { display: flex; gap: 18px; }
 .foot-links a { color: var(--muted); font-weight: 600; }
 .foot-links a:hover { color: var(--red); }
-.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-.link-btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; padding: 11px 18px; border-radius: 6px; color: #ffffff; }
-.link-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
-.link-btn.wa { background: #1f8a4c; }
-.link-btn.ig { background: transparent; border: 1px solid rgba(255,255,255,0.45); }
-.link-btn:hover { filter: brightness(1.1); }
-</style>
 
+html { color-scheme: light; }
+body { margin: 0; }
+img { max-width: 100%; }
+</style>
+</head>
+<body>
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top">AI <span>Scholars</span></a>
     <nav aria-label="Sections">
       <ul>
         <li><a href="#about">About</a></li>
+        <li><a href="#try">Try it</a></li>
         <li><a href="#schedule">Schedule</a></li>
         <li><a href="#project">Project</a></li>
         <li><a href="#team">Team</a></li>
         <li><a href="#join">Join</a></li>
-        <li><a href="#members">Members</a></li>
       </ul>
     </nav>
   </div>
 </header>
 
 <div class="hero" id="top">
+  <canvas id="net" aria-hidden="true"></canvas>
   <div class="wrap">
     <p class="eyebrow">A Brookline High School club</p>
-    <h1>Study smarter with <em>AI</em>.</h1>
+    <h1 aria-label="Study smarter with AI"><span id="rot" aria-hidden="true">Study smarter</span><span class="caret" aria-hidden="true"></span><br><span aria-hidden="true">with <em>AI</em>.</span></h1>
     <p class="lead">AI Scholars teaches BHS students to turn class notes into study guides, make practice quizzes, organize their classes, and build their own learning websites, while using AI honestly and within school rules.</p>
     <ul class="facts">
-      <li>Every week</li>
-      <li>X block, 45 min</li>
+      <li class="live"><span class="live-dot" aria-hidden="true"></span><span id="next-chip">First session: Thursday, Oct 15</span></li>
+      <li>Thursdays, X block</li>
       <li>No experience needed</li>
     </ul>
     <div class="cta">
       <a class="btn primary" href="#join">How to join</a>
-      <a class="btn ghost" href="#schedule">See the schedule</a>
+      <a class="btn ghost" href="#try">Try it yourself</a>
     </div>
   </div>
 </div>
 
 <main class="wrap">
 
+  <div class="stats" aria-label="Club at a glance">
+    <div class="stat"><b data-count="7">7</b><span>members so far</span></div>
+    <div class="stat"><b data-count="12">12</b><span>sessions this fall</span></div>
+    <div class="stat"><b data-count="4">4</b><span>co-founders</span></div>
+    <div class="stat"><b data-count="1">1</b><span>big website project</span></div>
+  </div>
+
   <section id="about">
-    <p class="kicker">About</p>
-    <h2>Use AI to understand, not to shortcut</h2>
-    <p class="mission">We teach BHS students how to use AI tools to study smarter, focusing on using AI to actually understand material, responsibly and within school rules.</p>
+    <p class="kicker reveal">About</p>
+    <h2 class="reveal">Use AI to understand, not to shortcut</h2>
+    <p class="mission reveal">We teach BHS students how to use AI tools to study smarter, focusing on using AI to actually understand material, responsibly and within school rules.</p>
     <div class="grid">
-      <div class="tile"><h3>Study guides</h3><p>Turn a unit's notes into a clear guide, then check it for mistakes.</p></div>
-      <div class="tile"><h3>Quizzes and flashcards</h3><p>Make practice tests before exams and learn to spot bad questions.</p></div>
-      <div class="tile"><h3>Organized classes</h3><p>Keep each class's syllabus and notes in one place you can ask questions about.</p></div>
-      <div class="tile"><h3>Build things</h3><p>Learn vibe coding and Claude Code, then build a learning website with your group.</p></div>
+      <div class="tile reveal"><div class="ico" aria-hidden="true">01</div><h3>Study guides</h3><p>Turn a unit's notes into a clear guide, then check it for mistakes.</p></div>
+      <div class="tile reveal"><div class="ico" aria-hidden="true">02</div><h3>Quizzes and flashcards</h3><p>Make practice tests before exams and learn to spot bad questions.</p></div>
+      <div class="tile reveal"><div class="ico" aria-hidden="true">03</div><h3>Organized classes</h3><p>Keep each class's syllabus and notes in one place you can ask questions about.</p></div>
+      <div class="tile reveal"><div class="ico" aria-hidden="true">04</div><h3>Build things</h3><p>Learn vibe coding and Claude Code, then build a learning website with your group.</p></div>
     </div>
   </section>
 
+  <section id="try">
+    <p class="kicker reveal">Try it</p>
+    <h2 class="reveal">Is AI good at this?</h2>
+    <p class="intro reveal">Our first lesson in 60 seconds. Pick an answer for each card and see how you do.</p>
+    <div class="quiz" id="quiz">
+      <div class="q reveal" data-answer="good"><h3>Summarizing your class notes</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Great at condensing what you give it. Still check it didn't drop anything important.</p></div>
+      <div class="q reveal" data-answer="bad"><h3>Knowing today's news</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Its knowledge stops at a cutoff date unless it can search the web. Check a news source.</p></div>
+      <div class="q reveal" data-answer="good"><h3>Explaining a concept five different ways</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>One of its best uses. Ask for an analogy, a simpler version, or an example.</p></div>
+      <div class="q reveal" data-answer="bad"><h3>Long math with big numbers</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can slip on multi-step arithmetic. Use it to explain the method, and a calculator for the numbers.</p></div>
+      <div class="q reveal" data-answer="good"><h3>Writing practice quiz questions</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Fast and useful for studying. Just double-check the answer key.</p></div>
+      <div class="q reveal" data-answer="bad"><h3>Citing real sources</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can invent citations that look real. Always open the source yourself.</p></div>
+    </div>
+    <div class="scorebar"><span class="score" id="score" aria-live="polite">0 of 6 answered</span><button type="button" class="ghost-btn" id="reset">Start over</button></div>
+
+    <div class="demo">
+      <div class="pane reveal">
+        <p class="tag">Messy class notes</p>
+        <pre class="notes">bio unit 4 - cell resp!!
+glucose + O2 -> CO2 + H2O + ATP (energy!!)
+3 stages?? glycolysis, krebs, ETC
+glycolysis = cytoplasm, no O2, 2 ATP
+krebs = mitochondria (matrix) NADH FADH2
+  CO2 released here
+ETC = inner membrane, most ATP (~32-34??)
+no O2 -> fermentation. lactic vs alcohol
+ASK about chemiosmosis on quiz??</pre>
+        <button type="button" class="run" id="run">Organize into a study guide</button>
+      </div>
+      <div class="pane reveal">
+        <p class="tag">Study guide</p>
+        <ul class="guide" id="guide"><li class="empty" style="display:block">Press the button to see what lesson 3 teaches.</li></ul>
+      </div>
+    </div>
+    <p class="fine">Example output for this demo, written in advance. In the club we do this live and check it against the textbook.</p>
+  </section>
+
   <section id="schedule">
-    <p class="kicker">Fall semester</p>
-    <h2>Weekly schedule</h2>
-    <p class="intro">Twelve sessions from late October to early February. We skip Thanksgiving week and winter break.</p>
+    <p class="kicker reveal">Fall semester</p>
+    <h2 class="reveal">Weekly schedule</h2>
+    <p class="intro reveal">Twelve Thursday sessions from Oct 15 to Jan 21. We skip Thanksgiving week and winter break. Filter by who's leading.</p>
+    <div class="filter" role="group" aria-label="Filter by lead">
+      <button type="button" data-who="all" aria-pressed="true">Everyone</button>
+      <button type="button" data-who="Guy" aria-pressed="false">Guy</button>
+      <button type="button" data-who="Jayden" aria-pressed="false">Jayden</button>
+      <button type="button" data-who="Xavier" aria-pressed="false">Xavier</button>
+      <button type="button" data-who="Vid" aria-pressed="false">Vid</button>
+      <button type="button" data-who="Iddo" aria-pressed="false">Iddo</button>
+    </div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>#</th><th>Week of</th><th>Topic</th><th>What we do</th><th>Lead</th></tr></thead>
+        <thead><tr><th>#</th><th>Thursday</th><th>Topic</th><th>What we do</th><th>Lead</th></tr></thead>
         <tbody id="sched">
-          <tr data-date="2026-10-26"><td class="num">1</td><td class="date">Oct 26</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden</td></tr>
-          <tr data-date="2026-11-02"><td class="num">2</td><td class="date">Nov 2</td><td class="topic">Prompting that works</td><td>Ask one question three ways and compare</td><td class="lead">Guy</td></tr>
-          <tr data-date="2026-11-09"><td class="num">3</td><td class="date">Nov 9</td><td class="topic">Study guides from your notes</td><td>Turn real notes into a guide; check for errors</td><td class="lead">Guy</td></tr>
-          <tr data-date="2026-11-16"><td class="num">4</td><td class="date">Nov 16</td><td class="topic">Practice quizzes and flashcards</td><td>Make a quiz, take it in pairs, spot bad questions</td><td class="lead">Jayden</td></tr>
-          <tr data-date="2026-11-30"><td class="num">5</td><td class="date">Nov 30</td><td class="topic">Organizing classes with Projects</td><td>One project per class with syllabus and notes</td><td class="lead">Guy</td></tr>
-          <tr data-date="2026-12-07"><td class="num">6</td><td class="date">Dec 7</td><td class="topic">Spot the mistake + AI ethics</td><td>Find errors; debate where AI helps or hurts learning</td><td class="lead">Jayden</td></tr>
-          <tr data-date="2026-12-14"><td class="num">7</td><td class="date">Dec 14</td><td class="topic">Intro to vibe coding</td><td>Build a tiny study tool by describing it</td><td class="lead">Jayden</td></tr>
-          <tr data-date="2027-01-04"><td class="num">8</td><td class="date">Jan 4</td><td class="topic">Building with Claude Code</td><td>Demo; kick off the website project</td><td class="lead">Iddo, Vid</td></tr>
-          <tr data-date="2027-01-11"><td class="num">9</td><td class="date">Jan 11</td><td class="topic">Midterm prep sprint</td><td>Build a review plan and quiz set for one test</td><td class="lead">Guy, Jayden</td></tr>
-          <tr data-date="2027-01-18"><td class="num">10</td><td class="date">Jan 18</td><td class="topic">Reusable instructions and skills</td><td>Write a "quiz me" or "explain like a tutor" setup</td><td class="lead">Guy</td></tr>
-          <tr data-date="2027-01-25"><td class="num">11</td><td class="date">Jan 25</td><td class="topic">Website project work session</td><td>Plan pages and features in groups</td><td class="lead">Iddo, Vid, Jayden</td></tr>
-          <tr data-date="2027-02-01"><td class="num">12</td><td class="date">Feb 1</td><td class="topic">Show-and-tell and spring planning</td><td>Members demo their work</td><td class="lead">Guy, Jayden</td></tr>
+          <tr data-date="2026-10-15"><td class="num">1</td><td class="date">Oct 15</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden</td></tr>
+          <tr data-date="2026-10-22"><td class="num">2</td><td class="date">Oct 22</td><td class="topic">Prompting that works</td><td>Rewrite weak prompts using the four parts of a good one</td><td class="lead">Vid</td></tr>
+          <tr data-date="2026-10-29"><td class="num">3</td><td class="date">Oct 29</td><td class="topic">Study guides from your notes</td><td>Turn real notes into a guide; check it for errors</td><td class="lead">Xavier</td></tr>
+          <tr data-date="2026-11-05"><td class="num">4</td><td class="date">Nov 5</td><td class="topic">Practice quizzes and flashcards</td><td>Make a quiz, then hunt for bad questions</td><td class="lead">Jayden</td></tr>
+          <tr data-date="2026-11-12"><td class="num">5</td><td class="date">Nov 12</td><td class="topic">Organizing your classes with Projects</td><td>Set up one class with its syllabus and notes</td><td class="lead">Guy</td></tr>
+          <tr data-date="2026-11-19"><td class="num">6</td><td class="date">Nov 19</td><td class="topic">Spot the mistake: AI awareness</td><td>Real or AI? Catch confident wrong answers</td><td class="lead">Iddo</td></tr>
+          <tr data-date="2026-12-03"><td class="num">7</td><td class="date">Dec 3</td><td class="topic">Hand-built vs AI-built: the website showdown</td><td>Vid's hand-coded site vs. the AI-built one</td><td class="lead">Vid</td></tr>
+          <tr data-date="2026-12-10"><td class="num">8</td><td class="date">Dec 10</td><td class="topic">Vibe coding + website project kickoff</td><td>Build a flashcard page by describing it</td><td class="lead">Jayden</td></tr>
+          <tr data-date="2026-12-17"><td class="num">9</td><td class="date">Dec 17</td><td class="topic">Reusable instructions and skills</td><td>Write a "quiz me" setup; groups form</td><td class="lead">Guy</td></tr>
+          <tr data-date="2027-01-07"><td class="num">10</td><td class="date">Jan 7</td><td class="topic">Building with Claude Code</td><td>Add a feature step by step; groups plan their sites</td><td class="lead">Iddo</td></tr>
+          <tr data-date="2027-01-14"><td class="num">11</td><td class="date">Jan 14</td><td class="topic">Midterm prep sprint</td><td>A real study plan for your hardest midterm</td><td class="lead">Xavier</td></tr>
+          <tr data-date="2027-01-21"><td class="num">12</td><td class="date">Jan 21</td><td class="topic">Showcase and spring planning</td><td>Member demos and plans for spring</td><td class="lead">Everyone</td></tr>
         </tbody>
       </table>
     </div>
@@ -198,11 +340,11 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
   </section>
 
   <section id="project">
-    <p class="kicker">Main project</p>
-    <h2>Build a learning website with your group</h2>
-    <p class="intro">Groups of 2–3 design and build a website that helps students learn a topic from a BHS class, like a biology unit, a history period, or Spanish vocabulary. You'll use vibe coding and Claude Code and learn how websites work along the way. At the end, every group presents at a showcase.</p>
+    <p class="kicker reveal">Main project</p>
+    <h2 class="reveal">Build a learning website with your group</h2>
+    <p class="intro reveal">Groups of 2–3 design and build a website that helps students learn a topic from a BHS class, like a biology unit, a history period, or Spanish vocabulary. You'll use vibe coding and Claude Code and learn how websites work along the way. At the end, every group presents at a showcase.</p>
     <div class="split">
-      <div>
+      <div class="reveal">
         <h3>Every site includes</h3>
         <ul class="checks">
           <li>A clear explanation of the topic, written and fact-checked by the group</li>
@@ -214,49 +356,47 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
         <ul class="checks">
           <li>Every member can explain how their site works</li>
           <li>Content is accurate and original</li>
-          <li>Builds use the advisor's account or school-approved tools</li>
         </ul>
       </div>
-      <div>
+      <div class="reveal">
         <h3>Timeline</h3>
-        <ol class="steps">
-          <li><span class="when">Week of Jan 4</span><strong>Kickoff</strong><span class="what">Claude Code demo and topic brainstorm</span></li>
-          <li><span class="when">Week of Jan 11</span><strong>Form groups</strong><span class="what">Groups of 2–3 pick a class topic</span></li>
-          <li><span class="when">Jan 18–25</span><strong>Plan</strong><span class="what">Sketch pages and features; leads approve plans</span></li>
-          <li><span class="when">Feb 1 – Mar 5</span><strong>Build the first version</strong><span class="what">Get the topic explanation working</span></li>
-          <li><span class="when">Week of Mar 8</span><strong>Midpoint check-in</strong><span class="what">2-minute progress demos and feedback</span></li>
-          <li><span class="when">Mar 15 – Apr 9</span><strong>Add interactive features</strong><span class="what">Quiz, flashcards, or game, plus "How we built it"</span></li>
-          <li><span class="when">Apr 12 and Apr 26</span><strong>Fact-check and test</strong><span class="what">Check every fact; swap sites with another group</span></li>
-          <li><span class="when">May 3–10</span><strong>Final fixes</strong><span class="what">Fix bugs and polish the design</span></li>
-          <li><span class="when">Week of May 17</span><strong>Showcase</strong><span class="what">Present to the club, advisor, and invited teachers</span></li>
+        <ol class="steps" id="steps">
+          <li data-start="2026-12-10" data-end="2026-12-16"><span class="when">Dec 10</span><strong>Kickoff</strong><span class="what">Vibe coding demo and topic brainstorm</span></li>
+          <li data-start="2026-12-17" data-end="2027-01-06"><span class="when">Dec 17</span><strong>Form groups</strong><span class="what">Groups of 2–3 pick a class topic</span></li>
+          <li data-start="2027-01-07" data-end="2027-01-20"><span class="when">Jan 7–14</span><strong>Plan</strong><span class="what">Sketch pages and features; leads approve plans</span></li>
+          <li data-start="2027-01-21" data-end="2027-03-03"><span class="when">Jan 21 – Feb 25</span><strong>Build the first version</strong><span class="what">Get the topic explanation working</span></li>
+          <li data-start="2027-03-04" data-end="2027-03-10"><span class="when">Mar 4</span><strong>Midpoint check-in</strong><span class="what">2-minute progress demos and feedback</span></li>
+          <li data-start="2027-03-11" data-end="2027-04-14"><span class="when">Mar 11 – Apr 8</span><strong>Add interactive features</strong><span class="what">Quiz, flashcards, or game, plus "How we built it"</span></li>
+          <li data-start="2027-04-15" data-end="2027-05-05"><span class="when">Apr 15 and Apr 29</span><strong>Fact-check and test</strong><span class="what">Check every fact; swap sites with another group</span></li>
+          <li data-start="2027-05-06" data-end="2027-05-19"><span class="when">May 6–13</span><strong>Final fixes</strong><span class="what">Fix bugs and polish the design</span></li>
+          <li data-start="2027-05-20" data-end="2027-05-26"><span class="when">May 20</span><strong>Showcase</strong><span class="what">Present to the club, advisor, and invited teachers</span></li>
         </ol>
       </div>
     </div>
   </section>
 
   <section id="team">
-    <p class="kicker">Officers</p>
-    <h2>Who runs AI Scholars</h2>
-    <p class="intro">All officers are in 10th grade. Workshop leads teach the sessions in their area.</p>
+    <p class="kicker reveal">Officers</p>
+    <h2 class="reveal">Who runs AI Scholars</h2>
+    <p class="intro reveal">Founded by four 10th graders. Each officer leads two lessons in their area; red rings mark co-founders.</p>
     <div class="team">
-      <div class="person"><div class="avatar" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-Founder · Co-president · Website designer · Workshop lead: Claude for files and tasks</div></div></div>
-      <div class="person"><div class="avatar" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-Founder · Co-president · Workshop lead: vibe coding</div></div></div>
-      <div class="person"><div class="avatar" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Co-Founder · Co-president · Secretary: Website Designer · Workshop co-lead · Social Media</div></div></div>
-      <div class="person"><div class="avatar" aria-hidden="true">IS</div><div><h3>Iddo Shubert</h3><div class="role">Representitive · Workshop Leads · Club fair table · Advertisement lead</div></div></div>
-      <div class="person"><div class="avatar" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Co-Founder · Secretary · Website designer · Workshop lead: Claude Code</div></div></div>
-     
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-founder · Co-president · Website designer · Workshop lead: Claude for files and tasks</div><div class="leads"><span>Kickoff · Oct 15</span><span>Projects · Nov 12</span><span>Skills · Dec 17</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-founder · Co-president · Workshop lead: vibe coding</div><div class="leads"><span>Kickoff · Oct 15</span><span>Quizzes · Nov 5</span><span>Vibe coding · Dec 10</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Co-founder · Secretary · Workshop lead: study guides and midterm prep</div><div class="leads"><span>Study guides · Oct 29</span><span>Midterm sprint · Jan 14</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Co-founder · Secretary · Website designer · Workshop lead: Claude Code</div><div class="leads"><span>Prompting · Oct 22</span><span>Website showdown · Dec 3</span></div></div></div>
+      <div class="person reveal"><div class="avatar" aria-hidden="true">IS</div><div><h3>Iddo Shubert</h3><div class="role">Representative and advertising · Workshop lead: Claude Code</div><div class="leads"><span>AI awareness · Nov 19</span><span>Claude Code · Jan 7</span></div></div></div>
     </div>
   </section>
 
   <section id="join">
-    <div class="join">
+    <div class="join reveal">
       <h2>Join AI Scholars</h2>
       <p>Anyone at BHS can join, whether you've never used AI or use it every day. Join our WhatsApp group for meeting updates, follow us on Instagram, or just show up to a meeting.</p>
       <dl>
-        <div><dt>When</dt><dd>Every week, X block</dd></div>
+        <div><dt>When</dt><dd>Thursdays, X block</dd></div>
         <div><dt>How long</dt><dd>45 minutes</dd></div>
         <div><dt>Where</dt><dd>Room coming soon</dd></div>
-        <div><dt>First meeting</dt><dd>Week of Oct 26</dd></div>
+        <div><dt>First meeting</dt><dd>Thursday, Oct 15</dd></div>
       </dl>
       <div class="links">
         <a class="link-btn wa" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>Join the WhatsApp group</a>
@@ -266,15 +406,14 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
   </section>
 
   <section id="members">
-    <p class="kicker">For members</p>
-    <h2>Ground rules</h2>
-    <p class="intro">Every member agrees to these. They keep the club useful and keep everyone out of trouble.</p>
+    <p class="kicker reveal">For members</p>
+    <h2 class="reveal">Ground rules</h2>
+    <p class="intro reveal">Every member agrees to these. They keep the club useful and keep everyone out of trouble.</p>
     <div class="rules">
-      <div class="tile"><h3>Follow each teacher's AI rules</h3><p>When you're not sure what's allowed, ask the teacher.</p></div>
-      <div class="tile"><h3>Learn, don't outsource</h3><p>Use AI to explain, quiz, and review. Never turn in AI-written work as your own.</p></div>
-      <div class="tile"><h3>Always check</h3><p>Compare AI answers to your notes or textbook. AI can be confidently wrong.</p></div>
-      <div class="tile"><h3>Protect privacy</h3><p>No other students' names, grades, or personal info in AI tools. Only upload class materials you're allowed to share.</p></div>
-      <div class="tile"><h3>Accounts</h3><p>Claude accounts are 18+. Club demos run from the advisor's account, and members practice with tools the school approves.</p></div>
+      <div class="tile reveal"><h3>Follow each teacher's AI rules</h3><p>When you're not sure what's allowed, ask the teacher.</p></div>
+      <div class="tile reveal"><h3>Learn, don't outsource</h3><p>Use AI to explain, quiz, and review. Never turn in AI-written work as your own.</p></div>
+      <div class="tile reveal"><h3>Always check</h3><p>Compare AI answers to your notes or textbook. AI can be confidently wrong.</p></div>
+      <div class="tile reveal"><h3>Protect privacy</h3><p>No other students' names, grades, or personal info in AI tools. Only upload class materials you're allowed to share.</p></div>
     </div>
   </section>
 
@@ -286,17 +425,215 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
 
 <script>
 (function () {
-  var rows = document.querySelectorAll('#sched tr');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var today = new Date(); today.setHours(0, 0, 0, 0);
-  var marked = false;
+  function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var DAY = 86400000;
+
+  /* Schedule: past / next, plus the live chip in the hero */
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#sched tr'));
+  var next = null;
   rows.forEach(function (r) {
-    var p = r.getAttribute('data-date').split('-');
-    var start = new Date(+p[0], +p[1] - 1, +p[2]);
-    var end = new Date(start); end.setDate(end.getDate() + 6);
-    if (end < today) { r.classList.add('done'); }
-    else if (!marked) { r.classList.add('next'); marked = true; }
+    var d = parse(r.getAttribute('data-date'));
+    if (d < today) r.classList.add('done');
+    else if (!next) { next = { row: r, date: d }; r.classList.add('next'); }
   });
+  var chip = document.getElementById('next-chip');
+  if (next) {
+    var days = Math.round((next.date - today) / DAY);
+    var name = next.row.querySelector('.topic').textContent.split(':')[0];
+    var when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : 'in ' + days + ' days';
+    var first = next.row === rows[0];
+    chip.textContent = (first ? 'First session ' : name + ' ') + when + ' · Thu ' + next.row.querySelector('.date').textContent;
+  } else {
+    chip.textContent = 'Spring schedule coming soon';
+  }
+
+  /* Schedule filter */
+  var fbtns = document.querySelectorAll('.filter button');
+  Array.prototype.forEach.call(fbtns, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(fbtns, function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+      var who = b.getAttribute('data-who');
+      rows.forEach(function (r) {
+        var lead = r.querySelector('.lead').textContent;
+        r.hidden = !(who === 'all' || lead.indexOf(who) > -1 || lead === 'Everyone');
+      });
+    });
+  });
+
+  /* Project timeline: mark past and current phase */
+  Array.prototype.forEach.call(document.querySelectorAll('#steps li'), function (li) {
+    var s = parse(li.getAttribute('data-start')), e = parse(li.getAttribute('data-end'));
+    if (e < today) li.classList.add('past');
+    else if (s <= today) li.classList.add('now');
+  });
+
+  /* Quiz */
+  var cards = document.querySelectorAll('#quiz .q');
+  var score = document.getElementById('score');
+  function tally() {
+    var answered = document.querySelectorAll('#quiz .q.right, #quiz .q.wrong').length;
+    var right = document.querySelectorAll('#quiz .q.right').length;
+    score.textContent = answered < cards.length ? answered + ' of ' + cards.length + ' answered' :
+      'You got ' + right + ' of ' + cards.length + (right === cards.length ? '. Perfect!' : right >= 4 ? '. Nice work.' : '. Come to lesson 1!');
+  }
+  Array.prototype.forEach.call(cards, function (q) {
+    var why = q.querySelector('.why');
+    Array.prototype.forEach.call(q.querySelectorAll('button'), function (b) {
+      b.addEventListener('click', function () {
+        var ok = b.getAttribute('data-pick') === q.getAttribute('data-answer');
+        q.classList.add(ok ? 'right' : 'wrong');
+        b.classList.add('picked');
+        Array.prototype.forEach.call(q.querySelectorAll('button'), function (x) { x.disabled = true; });
+        why.innerHTML = '<span class="verdict">' + (ok ? 'Right.' : 'Not quite.') + '</span> ' + why.getAttribute('data-text');
+        why.hidden = false;
+        tally();
+      });
+    });
+    why.setAttribute('data-text', why.textContent);
+  });
+  document.getElementById('reset').addEventListener('click', function () {
+    Array.prototype.forEach.call(cards, function (q) {
+      q.classList.remove('right', 'wrong');
+      var why = q.querySelector('.why'); why.hidden = true; why.textContent = why.getAttribute('data-text');
+      Array.prototype.forEach.call(q.querySelectorAll('button'), function (x) { x.disabled = false; x.classList.remove('picked'); });
+    });
+    tally();
+  });
+
+  /* Notes -> study guide demo */
+  var guideItems = [
+    ['1', 'Glycolysis', 'Cytoplasm · no oxygen needed · glucose → 2 pyruvate · 2 ATP'],
+    ['2', 'Krebs cycle', 'Mitochondrial matrix · releases CO₂ · makes NADH and FADH₂'],
+    ['3', 'Electron transport chain', 'Inner membrane · makes most of the ATP · O₂ accepts the electrons'],
+    ['!', 'No oxygen?', 'Fermentation: lactic acid (muscles) or alcohol (yeast)'],
+    ['?', 'Check with your teacher', 'Chemiosmosis isn’t explained in your notes. Ask before the quiz.']
+  ];
+  var guide = document.getElementById('guide'), run = document.getElementById('run'), timers = [];
+  run.addEventListener('click', function () {
+    timers.forEach(clearTimeout); timers = [];
+    guide.innerHTML = '';
+    guideItems.forEach(function (g, i) {
+      timers.push(setTimeout(function () {
+        var li = document.createElement('li');
+        li.innerHTML = '<span class="n' + (/[!?]/.test(g[0]) ? ' flag' : '') + '">' + g[0] + '</span><div><b>' + g[1] + '</b><span>' + g[2] + '</span></div>';
+        guide.appendChild(li);
+      }, reduce ? 0 : 380 * (i + 1)));
+    });
+    run.textContent = 'Run it again';
+  });
+
+  /* Typed headline */
+  var rot = document.getElementById('rot');
+  var words = ['Study smarter', 'Quiz yourself', 'Build websites', 'Think critically'];
+  if (!reduce && rot) {
+    var wi = 0;
+    var step = function () {
+      var target = words[(wi + 1) % words.length], cur = rot.textContent;
+      var del = setInterval(function () {
+        cur = cur.slice(0, -1); rot.textContent = cur;
+        if (!cur.length) {
+          clearInterval(del); var k = 0;
+          var add = setInterval(function () {
+            k++; rot.textContent = target.slice(0, k);
+            if (k >= target.length) { clearInterval(add); wi = (wi + 1) % words.length; setTimeout(step, 2400); }
+          }, 70);
+        }
+      }, 35);
+    };
+    setTimeout(step, 2600);
+  }
+
+  /* Scroll reveals and count-ups (content stays visible without JS) */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        var el = e.target;
+        if (el.hasAttribute('data-count')) {
+          var n = +el.getAttribute('data-count'), t0 = performance.now();
+          var tick = function (t) {
+            var k = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - k, 3)));
+            if (k < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        } else {
+          var sib = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+          el.style.animationDelay = Math.min(sib, 6) * 60 + 'ms';
+          el.classList.add('in');
+        }
+      });
+    }, { rootMargin: '0px 0px 60px 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('.reveal, [data-count]'), function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight - 40) return; // already on screen: leave as is
+      io.observe(el);
+    });
+  }
+
+  /* Hero network canvas */
+  var cv = document.getElementById('net'), hero = document.getElementById('top');
+  if (cv && cv.getContext) {
+    var ctx = cv.getContext('2d'), pts = [], W = 0, H = 0, dpr = 1, mouse = null, running = true, line = '185,196,220', red = '200,16,46';
+    var readColors = function () {
+      var cs = getComputedStyle(document.documentElement);
+      var hex = function (v, fb) { v = (v || '').trim(); if (!/^#[0-9a-f]{6}$/i.test(v)) return fb; return [1, 3, 5].map(function (i) { return parseInt(v.substr(i, 2), 16); }).join(','); };
+      line = hex(cs.getPropertyValue('--on-navy-muted'), line); red = hex(cs.getPropertyValue('--red'), red);
+    };
+    var size = function () {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = hero.clientWidth; H = hero.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(18, Math.min(70, Math.round(W * H / 16000)));
+      pts = [];
+      for (var i = 0; i < n; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() < 0.12 });
+      readColors(); draw();
+    };
+    var draw = function () {
+      ctx.clearRect(0, 0, W, H);
+      var D = 130;
+      for (var i = 0; i < pts.length; i++) {
+        var a = pts[i];
+        for (var j = i + 1; j < pts.length; j++) {
+          var b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
+          if (d < D) { ctx.strokeStyle = 'rgba(' + line + ',' + (0.22 * (1 - d / D)).toFixed(3) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        }
+        if (mouse) {
+          var mx = a.x - mouse.x, my = a.y - mouse.y, md = Math.sqrt(mx * mx + my * my);
+          if (md < 170) { ctx.strokeStyle = 'rgba(' + red + ',' + (0.5 * (1 - md / 170)).toFixed(3) + ')'; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
+        }
+      }
+      pts.forEach(function (p) {
+        ctx.fillStyle = p.r ? 'rgba(' + red + ',0.9)' : 'rgba(' + line + ',0.55)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r ? 2.6 : 1.8, 0, Math.PI * 2); ctx.fill();
+      });
+    };
+    var loop = function () {
+      if (!running) return;
+      pts.forEach(function (p) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      });
+      draw(); requestAnimationFrame(loop);
+    };
+    size();
+    window.addEventListener('resize', size);
+    if (window.matchMedia) {
+      var mq = matchMedia('(prefers-color-scheme: dark)');
+      if (mq.addEventListener) mq.addEventListener('change', function () { readColors(); draw(); });
+    }
+    if (!reduce) {
+      hero.addEventListener('pointermove', function (e) { var r = hero.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+      hero.addEventListener('pointerleave', function () { mouse = null; });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { var v = es[0].isIntersecting; if (v && !running) { running = true; loop(); } else if (!v) running = false; }).observe(hero);
+      }
+      loop();
+    }
+  }
 })();
 </script>
-
-</body></html>
+</body>
+</html>
