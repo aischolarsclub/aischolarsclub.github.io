@@ -3,7 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="AI Scholars: a Brookline High School club that teaches students to study smarter with AI.">
+<meta name="description" content="AI Scholars: a Brookline High School club that teaches students to study smarter with AI. Thursdays during X block, starting Oct 15.">
+<meta name="theme-color" content="#13294b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Scholars at BHS">
+<meta property="og:description" content="Study smarter with AI. Thursdays during X block, starting Oct 15. No experience needed.">
+<meta property="og:url" content="https://aischolarsclub.github.io/">
+<meta property="og:image" content="https://aischolarsclub.github.io/flyer.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <title>AI Scholars at BHS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..800&family=Public+Sans:wght@400;600;700&display=swap">
 <style>
@@ -29,10 +38,14 @@
   --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942;
   --good: #5fd08f; --good-soft: #15301f; color-scheme: dark }
 
+html { color-scheme: light; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 20; background: var(--red); color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 700; }
+.skip:focus { left: 12px; }
 .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
 a { color: var(--red); }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
@@ -59,6 +72,8 @@ nav a { color: var(--on-navy-muted); text-decoration: none; font-weight: 600; fo
 nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
 nav a:hover { color: var(--on-navy); }
 nav a:hover::after { transform: scaleX(1); }
+nav a.nav-cta { color: #fff; background: var(--red); padding: 3px 12px; border-radius: 999px; }
+nav a.nav-cta::after { display: none; }
 
 /* Hero */
 .hero { background: var(--navy); color: var(--on-navy); position: relative; overflow: hidden; }
@@ -194,6 +209,7 @@ ol.steps span.what { color: var(--muted); font-size: 0.95rem; }
 .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
 .link-btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; padding: 11px 18px; border-radius: 6px; color: #ffffff; transition: transform .15s, filter .15s; }
 .link-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+.link-btn.su { background: var(--red); }
 .link-btn.wa { background: #1f8a4c; }
 .link-btn.ig { background: transparent; border: 1px solid rgba(255,255,255,0.45); }
 .link-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
@@ -208,26 +224,72 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
 .foot-links a { color: var(--muted); font-weight: 600; }
 .foot-links a:hover { color: var(--red); }
 
-html { color-scheme: light; }
-body { margin: 0; }
-img { max-width: 100%; }
-  <section id="flyer">
-    <p class="kicker reveal">Spread the word</p>
-    <h2 class="reveal">Sign up for AI Scholars</h2>
-    <div class="flyer">
-      <img class="reveal" src="flyer.jpg" alt="AI Scholars flyer with the Brookline High School Spartan logo and a QR code to sign up" width="1545" height="1999" loading="lazy">
-      <div class="reveal">
-        <p class="intro">Scan the code on the flyer or use the button below to fill out the sign-up form. Share the flyer with friends or print it for the hallway.</p>
-        <div class="btns">
-          <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up now</a>
-          <a class="btn outline" href="flyer.jpg" download>Download the flyer</a>
-        </div>
-      </div>
-    </div>
-  </section>
+.flyer { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px; align-items: center; }
+.flyer img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px rgba(19,41,75,0.2); transition: transform .3s; }
+.flyer img:hover { transform: rotate(-1.5deg) scale(1.02); }
+.flyer .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn.outline { color: var(--fg); border: 1px solid var(--line); background: var(--surface); }
+@media (max-width: 640px) { .flyer { grid-template-columns: 1fr; } }
+
+/* Active nav link */
+nav a.active { color: var(--on-navy); }
+nav a.active::after { transform: scaleX(1); }
+
+/* Spring preview */
+.spring { margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; background: var(--surface); border: 1px dashed var(--red); border-radius: 10px; padding: 16px 18px; }
+.spring .badge { background: var(--red); color: #fff; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+.spring p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.spring b { color: var(--fg); }
+@media (max-width: 520px) { .spring { grid-template-columns: 1fr; } .spring .badge { justify-self: start; } }
+
+/* Projects gallery */
+.ptools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
+.ptools input { flex: 1 1 220px; min-width: 0; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; }
+.ptools input:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.pcount { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.proj { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.proj:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(19,41,75,0.16); border-color: var(--red); }
+.proj .thumb { height: 120px; background: var(--navy); position: relative; display: grid; place-items: center; color: #fff; font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: 2.2rem; letter-spacing: 0.02em; overflow: hidden; }
+.proj .thumb::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 30%, rgba(200,16,46,.55), transparent 55%), radial-gradient(circle at 85% 80%, rgba(185,196,220,.25), transparent 50%); }
+.proj .thumb span { position: relative; }
+.proj .thumb.alt::before { background: radial-gradient(circle at 80% 20%, rgba(200,16,46,.5), transparent 55%), radial-gradient(circle at 10% 90%, rgba(95,208,143,.25), transparent 50%); }
+.proj .thumb.open { background: var(--chip); color: var(--muted); border-bottom: 1px dashed var(--line); }
+.proj .thumb.open::before { display: none; }
+.proj .body { padding: 16px; display: grid; gap: 8px; flex: 1; align-content: start; }
+.proj h3 { margin: 0; }
+.proj p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+.proj .who { font-size: 0.85rem; font-weight: 600; color: var(--fg); }
+.proj .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 999px; padding: 2px 9px; background: var(--chip); color: var(--muted); }
+.pill.live { background: var(--good-soft); color: var(--good); }
+.pill.wip { background: var(--red-soft); color: var(--red); }
+.proj .go { margin-top: auto; padding: 0 16px 16px; }
+.proj .go a, .proj .go span { font-weight: 700; font-size: 0.92rem; text-decoration: none; }
+.proj .go span { color: var(--muted); }
+.proj .go a:hover { text-decoration: underline; }
+.proj.open { border-style: dashed; }
+.pempty { color: var(--muted); margin: 8px 0 0; }
+.submit { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: var(--chip); border-radius: 10px; padding: 16px 18px; }
+.submit p { margin: 0; max-width: 60ch; }
+
+/* Perks */
+.perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.perk { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; position: relative; overflow: hidden; transition: transform .2s, border-color .2s; }
+.perk:hover { transform: translateY(-3px) rotate(-0.4deg); border-color: var(--red); }
+.perk .emoji { font-size: 2rem; line-height: 1; display: block; margin-bottom: 10px; }
+.perk p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.perk.big { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
+.perk.big p { color: var(--on-navy-muted); }
+.facts li.treat { border-color: rgba(255,255,255,0.4); }
+
+/* Back to top */
+.totop { position: fixed; right: 16px; bottom: 16px; z-index: 9; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--red); color: #fff; font-size: 1.2rem; font-weight: 800; box-shadow: 0 6px 16px rgba(0,0,0,0.25); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .25s, transform .25s; }
+.totop.show { opacity: 1; transform: none; pointer-events: auto; }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top">AI <span>Scholars</span></a>
@@ -236,9 +298,11 @@ img { max-width: 100%; }
         <li><a href="#about">About</a></li>
         <li><a href="#try">Try it</a></li>
         <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#project">Project</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#perks">Perks</a></li>
         <li><a href="#team">Team</a></li>
         <li><a href="#join">Join</a></li>
+        <li><a class="nav-cta" href="#flyer">Sign up</a></li>
       </ul>
     </nav>
   </div>
@@ -254,15 +318,16 @@ img { max-width: 100%; }
       <li class="live"><span class="live-dot" aria-hidden="true"></span><span id="next-chip">First session: Thursday, Oct 15</span></li>
       <li>Thursdays, X block</li>
       <li>No experience needed</li>
+      <li class="treat">Free snacks and gift cards</li>
     </ul>
     <div class="cta">
-      <a class="btn primary" href="#join">How to join</a>
-      <a class="btn ghost" href="#try">Try it yourself</a>
+      <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up</a>
+      <a class="btn ghost" href="#projects">See member projects</a>
     </div>
   </div>
 </div>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
   <div class="stats" aria-label="Club at a glance">
     <div class="stat"><b data-count="7">7</b><span>members so far</span></div>
@@ -329,28 +394,29 @@ ASK about chemiosmosis on quiz??</pre>
       <button type="button" data-who="Jayden" aria-pressed="false">Jayden</button>
       <button type="button" data-who="Xavier" aria-pressed="false">Xavier</button>
       <button type="button" data-who="Vid" aria-pressed="false">Vid</button>
-      <button type="button" data-who="Iddo" aria-pressed="false">Iddo</button>
+      <button type="button" data-who="Tagir" aria-pressed="false">Tagir</button>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>#</th><th>Thursday</th><th>Topic</th><th>What we do</th><th>Lead</th></tr></thead>
         <tbody id="sched">
-          <tr data-date="2026-10-15"><td class="num">1</td><td class="date">Oct 15</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden</td></tr>
+          <tr data-date="2026-10-15"><td class="num">1</td><td class="date">Oct 15</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden, Vid</td></tr>
           <tr data-date="2026-10-22"><td class="num">2</td><td class="date">Oct 22</td><td class="topic">Prompting that works</td><td>Rewrite weak prompts using the four parts of a good one</td><td class="lead">Vid</td></tr>
           <tr data-date="2026-10-29"><td class="num">3</td><td class="date">Oct 29</td><td class="topic">Study guides from your notes</td><td>Turn real notes into a guide; check it for errors</td><td class="lead">Xavier</td></tr>
           <tr data-date="2026-11-05"><td class="num">4</td><td class="date">Nov 5</td><td class="topic">Practice quizzes and flashcards</td><td>Make a quiz, then hunt for bad questions</td><td class="lead">Jayden</td></tr>
           <tr data-date="2026-11-12"><td class="num">5</td><td class="date">Nov 12</td><td class="topic">Organizing your classes with Projects</td><td>Set up one class with its syllabus and notes</td><td class="lead">Guy</td></tr>
-          <tr data-date="2026-11-19"><td class="num">6</td><td class="date">Nov 19</td><td class="topic">Spot the mistake: AI awareness</td><td>Real or AI? Catch confident wrong answers</td><td class="lead">Iddo</td></tr>
+          <tr data-date="2026-11-19"><td class="num">6</td><td class="date">Nov 19</td><td class="topic">Spot the mistake: AI awareness</td><td>Real or AI? Catch confident wrong answers</td><td class="lead">Tagir</td></tr>
           <tr data-date="2026-12-03"><td class="num">7</td><td class="date">Dec 3</td><td class="topic">Hand-built vs AI-built: the website showdown</td><td>Vid's hand-coded site vs. the AI-built one</td><td class="lead">Vid</td></tr>
           <tr data-date="2026-12-10"><td class="num">8</td><td class="date">Dec 10</td><td class="topic">Vibe coding + website project kickoff</td><td>Build a flashcard page by describing it</td><td class="lead">Jayden</td></tr>
           <tr data-date="2026-12-17"><td class="num">9</td><td class="date">Dec 17</td><td class="topic">Reusable instructions and skills</td><td>Write a "quiz me" setup; groups form</td><td class="lead">Guy</td></tr>
-          <tr data-date="2027-01-07"><td class="num">10</td><td class="date">Jan 7</td><td class="topic">Building with Claude Code</td><td>Add a feature step by step; groups plan their sites</td><td class="lead">Iddo</td></tr>
+          <tr data-date="2027-01-07"><td class="num">10</td><td class="date">Jan 7</td><td class="topic">Building with Claude Code</td><td>Add a feature step by step; groups plan their sites</td><td class="lead">Tagir</td></tr>
           <tr data-date="2027-01-14"><td class="num">11</td><td class="date">Jan 14</td><td class="topic">Midterm prep sprint</td><td>A real study plan for your hardest midterm</td><td class="lead">Xavier</td></tr>
           <tr data-date="2027-01-21"><td class="num">12</td><td class="date">Jan 21</td><td class="topic">Showcase and spring planning</td><td>Member demos and plans for spring</td><td class="lead">Everyone</td></tr>
         </tbody>
       </table>
     </div>
     <p class="fine">Dates may shift around the BHS calendar.</p>
+    <div class="spring reveal"><span class="badge">Coming in spring</span><p><b>AI and the businesses of the future.</b> How startups and companies are using AI right now, which jobs and industries it's changing, and a challenge to pitch your own AI-powered business idea to the club.</p></div>
   </section>
 
   <section id="project">
@@ -389,29 +455,143 @@ ASK about chemiosmosis on quiz??</pre>
     </div>
   </section>
 
-  <section id="team">
-    <p class="kicker reveal">Officers</p>
-    <h2 class="reveal">Who runs AI Scholars</h2>
-    <p class="intro reveal">Founded by four 10th graders. Each officer leads two lessons in their area; red rings mark co-founders.</p>
-    <div class="team">
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-founder · Co-president · Website designer · Workshop lead: Claude for files and tasks</div><div class="leads"><span>Kickoff · Oct 15</span><span>Projects · Nov 12</span><span>Skills · Dec 17</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-founder · Co-president · Workshop lead: vibe coding</div><div class="leads"><span>Kickoff · Oct 15</span><span>Quizzes · Nov 5</span><span>Vibe coding · Dec 10</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Co-founder · Secretary · Vice-President · Workshop lead: study guides and midterm prep</div><div class="leads"><span>Study guides · Oct 29</span><span>Midterm sprint · Jan 14</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Co-founder · Secretary · Website designer · Workshop lead: Claude Code</div><div class="leads"><span>Prompting · Oct 22</span><span>Website showdown · Dec 3</span></div></div></div>
-      <div class="person reveal"><div class="avatar" aria-hidden="true">IS</div><div><h3>Tagir Parchiev</h3><div class="role">Representative and advertising · Workshop lead: Claude Code</div><div class="leads"><span>AI awareness · Nov 19</span><span>Claude Code · Jan 7</span></div></div></div>
+  <section id="projects">
+    <p class="kicker reveal">Member projects</p>
+    <h2 class="reveal">See what members are building</h2>
+    <p class="intro reveal">Every project from the club lives here: group learning websites, study tools, and experiments. Group projects start Dec 10, so the open slots below will fill up over the year.</p>
+    <div class="ptools">
+      <div class="filter" role="group" aria-label="Filter projects" id="pfilter" style="margin:0">
+        <button type="button" data-status="all" aria-pressed="true">All</button>
+        <button type="button" data-status="live" aria-pressed="false">Live</button>
+        <button type="button" data-status="wip" aria-pressed="false">In progress</button>
+        <button type="button" data-status="open" aria-pressed="false">Open slots</button>
+      </div>
+      <input type="search" id="psearch" placeholder="Search by name, topic, or member" aria-label="Search projects">
+      <span class="pcount" id="pcount" aria-live="polite"></span>
+    </div>
+
+    <div class="projects" id="plist">
+      <!-- TO ADD A PROJECT: copy one <article> block, paste it at the top of this list, and change the text.
+           data-status: live, wip, or open. Put the project's link in the href. -->
+
+      <article class="proj reveal" data-status="live">
+        <div class="thumb"><span>AI</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill live">Live</span><span class="pill">Club</span></div>
+          <h3>The AI Scholars website</h3>
+          <div class="who">Guy Berkovitz · Vid Rajlic</div>
+          <p>This site. Built with AI help: a live schedule, the "Is AI good at this?" quiz, and this projects page.</p>
+        </div>
+        <div class="go"><a href="https://aischolarsclub.github.io/">Open project →</a></div>
+      </article>
+
+      <article class="proj reveal" data-status="wip">
+        <div class="thumb alt"><span>VS</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill wip">In progress</span><span class="pill">Coding</span></div>
+          <h3>Hand-built vs AI-built showdown</h3>
+          <div class="who">Vid Rajlic</div>
+          <p>The same website built twice, once by hand and once with AI. Compared side by side on Dec 3.</p>
+        </div>
+        <div class="go"><span>Demo on Dec 3</span></div>
+      </article>
+
+      <article class="proj open reveal" data-status="open">
+        <div class="thumb open"><span>Bio</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill">Open slot</span><span class="pill">Science</span></div>
+          <h3>Your group's learning website</h3>
+          <div class="who">Group of 2–3</div>
+          <p>Example idea: a cell respiration explainer with a quiz and flashcards for Biology.</p>
+        </div>
+        <div class="go"><span>Groups form Dec 17</span></div>
+      </article>
+
+      <article class="proj open reveal" data-status="open">
+        <div class="thumb open"><span>Hist</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill">Open slot</span><span class="pill">History</span></div>
+          <h3>Your group's learning website</h3>
+          <div class="who">Group of 2–3</div>
+          <p>Example idea: an interactive timeline of a history unit with a review game.</p>
+        </div>
+        <div class="go"><span>Groups form Dec 17</span></div>
+      </article>
+
+      <article class="proj open reveal" data-status="open">
+        <div class="thumb open"><span>Esp</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill">Open slot</span><span class="pill">Languages</span></div>
+          <h3>Your group's learning website</h3>
+          <div class="who">Group of 2–3</div>
+          <p>Example idea: Spanish vocab flashcards that quiz you on the words you miss most.</p>
+        </div>
+        <div class="go"><span>Groups form Dec 17</span></div>
+      </article>
+
+      <article class="proj open reveal" data-status="open">
+        <div class="thumb open"><span>+</span></div>
+        <div class="body">
+          <div class="meta"><span class="pill">Open slot</span><span class="pill">Anything</span></div>
+          <h3>Your own idea</h3>
+          <div class="who">Any member</div>
+          <p>Built a study tool, a prompt that works, or a cool experiment? It belongs here too.</p>
+        </div>
+        <div class="go"><span>Send us the link</span></div>
+      </article>
+    </div>
+    <p class="pempty" id="pempty" hidden>No projects match that search yet.</p>
+
+    <div class="submit reveal">
+      <p><b>Want your project on this page?</b> Send the link and your group's names to any officer or in the WhatsApp group, and we'll add it.</p>
+      <a class="btn primary" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">Share your project</a>
     </div>
   </section>
 
-  .flyer { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px; align-items: center; }
-.flyer img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px rgba(19,41,75,0.2); transition: transform .3s; }
-.flyer img:hover { transform: rotate(-1.5deg) scale(1.02); }
-.flyer .btns { display: flex; flex-wrap: wrap; gap: 12px; }
-.btn.outline { color: var(--fg); border: 1px solid var(--line); background: var(--surface); }
-@media (max-width: 640px) { .flyer { grid-template-columns: 1fr; } }
-   <section id="join">
+  <section id="perks">
+    <p class="kicker reveal">Perks</p>
+    <h2 class="reveal">Snacks, gift cards, and prizes all year</h2>
+    <p class="intro reveal">Learning is better with food. We give away snacks and gift cards often throughout the year, so it pays to show up.</p>
+    <div class="perks">
+      <div class="perk big reveal"><span class="emoji" aria-hidden="true">🎁</span><h3>Gift card giveaways</h3><p>Regular gift card raffles and prizes for members throughout the school year.</p></div>
+      <div class="perk reveal"><span class="emoji" aria-hidden="true">🍪</span><h3>Snacks at meetings</h3><p>Snacks at our Thursday meetings, all year long.</p></div>
+      <div class="perk reveal"><span class="emoji" aria-hidden="true">🏆</span><h3>Challenge prizes</h3><p>Win the in-club quiz games and prompt challenges to earn rewards.</p></div>
+      <div class="perk reveal"><span class="emoji" aria-hidden="true">🎉</span><h3>Showcase celebration</h3><p>Prizes and a party for the best projects at the May showcase.</p></div>
+    </div>
+  </section>
+
+  <section id="team">
+    <p class="kicker reveal">Officers</p>
+    <h2 class="reveal">Who runs AI Scholars</h2>
+    <p class="intro reveal">Founded by four 10th graders. Every lesson has a lead from the team; red rings mark co-founders.</p>
+    <div class="team">
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-founder · Co-president · Website designer · Workshop lead: Claude for files and tasks</div><div class="leads"><span>Kickoff · Oct 15</span><span>Projects · Nov 12</span><span>Skills · Dec 17</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-founder · Co-president · Workshop lead: vibe coding</div><div class="leads"><span>Kickoff · Oct 15</span><span>Quizzes · Nov 5</span><span>Vibe coding · Dec 10</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Co-founder · Secretary · Workshop lead: study guides and midterm prep</div><div class="leads"><span>Study guides · Oct 29</span><span>Midterm sprint · Jan 14</span></div></div></div>
+      <div class="person reveal"><div class="avatar founder" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Co-founder · Secretary · Website designer · Workshop lead: Claude Code</div><div class="leads"><span>Kickoff · Oct 15</span><span>Prompting · Oct 22</span><span>Website showdown · Dec 3</span></div></div></div>
+      <div class="person reveal"><div class="avatar" aria-hidden="true">TP</div><div><h3>Tagir Parchiev</h3><div class="role">Co-workshop leader</div><div class="leads"><span>AI awareness · Nov 19</span><span>Claude Code · Jan 7</span></div></div></div>
+    </div>
+  </section>
+
+  <section id="flyer">
+    <p class="kicker reveal">Spread the word</p>
+    <h2 class="reveal">Sign up for AI Scholars</h2>
+    <div class="flyer">
+      <img class="reveal" src="flyer.jpg" alt="AI Scholars flyer with the Brookline High School Spartan logo and a QR code to sign up" width="1545" height="1999" loading="lazy">
+      <div class="reveal">
+        <p class="intro">Scan the code on the flyer or use the button below to fill out the sign-up form. Share the flyer with friends or print it for the hallway.</p>
+        <div class="btns">
+          <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up now</a>
+          <a class="btn outline" href="flyer.jpg" download>Download the flyer</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="join">
     <div class="join reveal">
       <h2>Join AI Scholars</h2>
-      <p>Anyone at BHS can join, whether you've never used AI or use it every day. Join our WhatsApp group for meeting updates, follow us on Instagram, or just show up to a meeting.</p>
+      <p>Anyone at BHS can join, whether you've never used AI or use it every day. Fill out the sign-up form, join our WhatsApp group for meeting updates, or just show up to a meeting.</p>
       <dl>
         <div><dt>When</dt><dd>Thursdays, X block</dd></div>
         <div><dt>How long</dt><dd>45 minutes</dd></div>
@@ -419,6 +599,7 @@ ASK about chemiosmosis on quiz??</pre>
         <div><dt>First meeting</dt><dd>Thursday, Oct 15</dd></div>
       </dl>
       <div class="links">
+        <a class="link-btn su" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Fill out the sign-up form</a>
         <a class="link-btn wa" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>Join the WhatsApp group</a>
         <a class="link-btn ig" href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9a6.6 6.6 0 0 0-1.8-4.7A6.6 6.6 0 0 0 15.4 1.4C13.6 1.3 10.4 1.3 8.6 1.4a6.6 6.6 0 0 0-4.7 1.8A6.6 6.6 0 0 0 2.1 7.9c-.1 1.8-.1 7.2 0 9a6.6 6.6 0 0 0 1.8 4.7 6.6 6.6 0 0 0 4.7 1.8c1.8.1 7.2.1 9 0a6.6 6.6 0 0 0 4.7-1.8 6.6 6.6 0 0 0 1.8-4.7c.1-1.8.1-7.2 0-9zm-2.2 11a3.4 3.4 0 0 1-1.9 1.9c-1.3.5-4.4.4-5.8.4s-4.5.1-5.8-.4a3.4 3.4 0 0 1-1.9-1.9c-.5-1.3-.4-4.4-.4-5.8s-.1-4.5.4-5.8a3.4 3.4 0 0 1 1.9-1.9c1.3-.5 4.4-.4 5.8-.4s4.5-.1 5.8.4a3.4 3.4 0 0 1 1.9 1.9c.5 1.3.4 4.4.4 5.8s.1 4.5-.4 5.8z"/></svg>Follow @aischolarsclub</a>
       </div>
@@ -440,8 +621,9 @@ ASK about chemiosmosis on quiz??</pre>
 </main>
 
 <footer>
-  <div class="wrap foot"><span>AI Scholars · Brookline High School · 2026–27</span><span class="foot-links"><a href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener">Instagram</a><a href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">WhatsApp group</a></span></div>
+  <div class="wrap foot"><span>AI Scholars · Brookline High School · 2026–27</span><span class="foot-links"><a href="#projects">Projects</a><a href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener">Instagram</a><a href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">WhatsApp group</a></span></div>
 </footer>
+<button type="button" class="totop" id="totop" aria-label="Back to top">↑</button>
 
 <script>
 (function () {
@@ -470,7 +652,7 @@ ASK about chemiosmosis on quiz??</pre>
   }
 
   /* Schedule filter */
-  var fbtns = document.querySelectorAll('.filter button');
+  var fbtns = document.querySelectorAll('#schedule .filter button');
   Array.prototype.forEach.call(fbtns, function (b) {
     b.addEventListener('click', function () {
       Array.prototype.forEach.call(fbtns, function (c) { c.setAttribute('aria-pressed', String(c === b)); });
@@ -488,6 +670,45 @@ ASK about chemiosmosis on quiz??</pre>
     if (e < today) li.classList.add('past');
     else if (s <= today) li.classList.add('now');
   });
+
+  /* Projects gallery: filter + search */
+  var projs = Array.prototype.slice.call(document.querySelectorAll('#plist .proj'));
+  var pbtns = document.querySelectorAll('#pfilter button');
+  var psearch = document.getElementById('psearch'), pcount = document.getElementById('pcount'), pempty = document.getElementById('pempty');
+  var pstatus = 'all';
+  function pupdate() {
+    var q = (psearch.value || '').trim().toLowerCase(), shown = 0;
+    projs.forEach(function (p) {
+      var ok = (pstatus === 'all' || p.getAttribute('data-status') === pstatus) && (!q || p.textContent.toLowerCase().indexOf(q) > -1);
+      p.hidden = !ok; if (ok) shown++;
+    });
+    var real = projs.filter(function (p) { return p.getAttribute('data-status') !== 'open'; }).length;
+    pcount.textContent = real + (real === 1 ? ' project' : ' projects') + ' so far';
+    pempty.hidden = shown > 0;
+  }
+  Array.prototype.forEach.call(pbtns, function (b) {
+    b.addEventListener('click', function () {
+      Array.prototype.forEach.call(pbtns, function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+      pstatus = b.getAttribute('data-status'); pupdate();
+    });
+  });
+  psearch.addEventListener('input', pupdate);
+  pupdate();
+
+  /* Active nav link + back-to-top */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]:not(.nav-cta)'));
+  var totop = document.getElementById('totop');
+  totop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+  var ticking = false;
+  function onScroll() {
+    ticking = false;
+    totop.classList.toggle('show', window.scrollY > 700);
+    var y = window.scrollY + 120, cur = null;
+    navLinks.forEach(function (a) { var s = document.querySelector(a.getAttribute('href')); if (s && s.offsetTop <= y) cur = a; });
+    navLinks.forEach(function (a) { a.classList.toggle('active', a === cur); });
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
 
   /* Quiz */
   var cards = document.querySelectorAll('#quiz .q');
