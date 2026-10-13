@@ -3,21 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="AI Scholars: a Brookline High School club that teaches students to study smarter with AI. Thursdays during X block, starting Oct 15.">
+<title>AI Scholars at BHS</title>
+<meta name="description" content="AI Scholars: a Brookline High School club that teaches students to study smarter with AI. Every X block (Day 3) in Room 214, starting Monday, Oct 26.">
 <meta name="theme-color" content="#13294b">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AI Scholars at BHS">
-<meta property="og:description" content="Study smarter with AI. Thursdays during X block, starting Oct 15. No experience needed.">
+<meta property="og:description" content="Study smarter with AI. Every X block in Room 214, starting Oct 26. No experience needed. Free snacks and gift cards.">
 <meta property="og:url" content="https://aischolarsclub.github.io/">
 <meta property="og:image" content="https://aischolarsclub.github.io/flyer.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<title>AI Scholars at BHS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,600..800&family=Public+Sans:wght@400;600;700&display=swap">
 <style>
-/* Layout: sticky nav, a navy hero with a live "neural" canvas and typed headline, a stats strip, then single-column sections at ~960px.
-   Interactive: "Is AI good at this?" quiz, notes-to-study-guide demo, schedule filter by lead, live next-session countdown. */
+/* =========================================================
+   AI SCHOLARS WEBSITE: STYLES
+   You don't need to edit anything in here.
+   To change meetings, team, or projects, scroll to the
+   "EDIT HERE" section near the bottom of this file.
+   ========================================================= */
+
+/* ---------- Colors (light + dark) ---------- */
 :root {
   --bg: #f6f7fa; --surface: #ffffff; --fg: #17203a; --muted: #56607a; --line: #d9dee9;
   --navy: #13294b; --on-navy: #ffffff; --on-navy-muted: #b9c4dc;
@@ -26,6 +32,7 @@
   --display: "Archivo", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
   --body: "Public Sans", "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0d1424; --surface: #151f36; --fg: #e5e9f2; --muted: #9ba6c0; --line: #2a3654;
@@ -38,20 +45,21 @@
   --red: #ff5c70; --red-soft: #3a1823; --chip: #1d2942;
   --good: #5fd08f; --good-soft: #15301f; color-scheme: dark }
 
-html { color-scheme: light; }
+/* ---------- Base ---------- */
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 img { max-width: 100%; }
-.skip { position: absolute; left: -9999px; top: 8px; z-index: 20; background: var(--red); color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 700; }
-.skip:focus { left: 12px; }
-.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
 a { color: var(--red); }
-a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
 button { font: inherit; cursor: pointer; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 30; background: var(--red); color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 700; }
+.skip:focus { left: 12px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Motion */
+/* ---------- Motion ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(200,16,46,.6); } 100% { box-shadow: 0 0 0 10px rgba(200,16,46,0); } }
@@ -59,26 +67,40 @@ button { font: inherit; cursor: pointer; }
 .in { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .in, .caret, .live-dot { animation: none !important; }
+  .in, .caret, .live-dot, .guide li { animation: none !important; }
 }
 
-/* Nav */
-header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--navy); border-bottom: 3px solid var(--red); }
-header.nav .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding-block: 10px; }
-.brand { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: 1.15rem; color: var(--on-navy); text-decoration: none; letter-spacing: 0.01em; }
+/* ---------- Nav ---------- */
+header.nav { position: sticky; top: 0; z-index: 20; background: var(--navy); border-bottom: 3px solid var(--red); }
+header.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px; }
+.brand { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: 1.2rem; color: var(--on-navy); text-decoration: none; white-space: nowrap; }
 .brand span { color: var(--red); }
-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
 nav a { color: var(--on-navy-muted); text-decoration: none; font-weight: 600; font-size: 0.92rem; position: relative; }
 nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
-nav a:hover { color: var(--on-navy); }
-nav a:hover::after { transform: scaleX(1); }
+nav a:hover, nav a.active { color: var(--on-navy); }
+nav a:hover::after, nav a.active::after { transform: scaleX(1); }
 nav a.nav-cta { color: #fff; background: var(--red); padding: 3px 12px; border-radius: 999px; }
 nav a.nav-cta::after { display: none; }
+.icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: var(--on-navy); display: grid; place-items: center; flex: none; }
+.icon-btn:hover { background: rgba(255,255,255,0.1); }
+.icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+#menu-btn { display: none; }
+@media (max-width: 860px) {
+  #menu-btn { display: grid; }
+  header.nav nav { position: absolute; left: 0; right: 0; top: 100%; background: var(--navy); border-bottom: 3px solid var(--red); display: none; }
+  header.nav.open nav { display: block; }
+  nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 6px 20px 14px; }
+  nav li a { display: block; padding: 10px 0; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  nav a::after { display: none; }
+  nav a.nav-cta { text-align: center; margin-top: 10px; padding: 10px; border: 0; }
+}
 
-/* Hero */
+/* ---------- Hero ---------- */
 .hero { background: var(--navy); color: var(--on-navy); position: relative; overflow: hidden; }
 .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.hero .wrap { position: relative; padding-block: 64px 68px; display: grid; gap: 18px; }
+.hero .wrap { position: relative; padding-block: 64px 72px; display: grid; gap: 18px; }
 .eyebrow { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--on-navy-muted); margin: 0; }
 .hero h1 { font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 0.98; margin: 0; min-height: 2em; }
 .hero h1 em { font-style: normal; color: var(--red); }
@@ -87,45 +109,55 @@ nav a.nav-cta::after { display: none; }
 .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 0; padding: 0; list-style: none; }
 .facts li { border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 14px; font-size: 0.9rem; font-weight: 600; background: rgba(10,26,54,0.5); }
 .facts li.live { border-color: var(--red); display: inline-flex; align-items: center; gap: 8px; }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; flex: none; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
-.btn { display: inline-block; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 6px; transition: transform .15s, filter .15s; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 6px; border: 0; transition: transform .15s, filter .15s; }
 .btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .btn.primary { background: var(--red); color: #ffffff; }
 .btn.ghost { color: var(--on-navy); border: 1px solid rgba(255,255,255,0.4); background: rgba(10,26,54,0.5); }
+.btn.outline { color: var(--fg); border: 1px solid var(--line); background: var(--surface); }
 
-/* Stats */
-.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: -28px; position: relative; z-index: 1; }
-.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(19,41,75,0.08); }
+/* ---------- Stats ---------- */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: -30px; position: relative; z-index: 1; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; box-shadow: 0 6px 18px rgba(19,41,75,0.08); }
 .stat b { display: block; font-family: var(--display); font-stretch: 85%; font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
 .stat span { color: var(--muted); font-size: 0.88rem; }
 @media (max-width: 620px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-/* Sections */
-section { padding-block: 56px 8px; scroll-margin-top: 70px; }
-h2 { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: clamp(1.7rem, 4vw, 2.2rem); line-height: 1.1; margin: 0 0 6px; text-wrap: balance; }
+/* ---------- Sections ---------- */
+section { padding-block: 64px 8px; scroll-margin-top: 64px; }
+h2 { font-family: var(--display); font-stretch: 85%; font-weight: 800; font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.1; margin: 0 0 6px; text-wrap: balance; }
+h3 { font-size: 1.05rem; margin: 0 0 4px; }
 .kicker { color: var(--red); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em; margin: 0 0 6px; }
 .intro { color: var(--muted); max-width: 64ch; margin: 0 0 24px; }
-h3 { font-size: 1.05rem; margin: 0 0 4px; }
-
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; min-width: 0; transition: transform .2s, border-color .2s; }
-.tile:hover { transform: translateY(-3px); border-color: var(--red); }
-.tile p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-.tile .ico { width: 34px; height: 34px; border-radius: 8px; background: var(--red-soft); color: var(--red); display: grid; place-items: center; font-weight: 800; font-family: var(--display); margin-bottom: 10px; }
+.fine { color: var(--muted); font-size: 0.88rem; margin: 10px 0 0; }
 .mission { font-size: 1.2rem; line-height: 1.5; max-width: 62ch; border-left: 4px solid var(--red); padding-left: 18px; margin: 0 0 28px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; transition: transform .2s, border-color .2s, box-shadow .2s; }
+.card:hover { transform: translateY(-3px); border-color: var(--red); }
+.card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.ico { width: 34px; height: 34px; border-radius: 8px; background: var(--red-soft); color: var(--red); display: grid; place-items: center; font-weight: 800; font-family: var(--display); margin-bottom: 10px; }
 
-/* Quiz */
+/* ---------- Chips / filters / tabs ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips button { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 5px 14px; font-weight: 600; font-size: 0.9rem; transition: background .2s, color .2s; }
+.chips button:hover { border-color: var(--fg); }
+.chips button[aria-pressed="true"], .chips button[aria-selected="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+.tabs { margin-bottom: 18px; }
+.tabs button { font-size: 0.95rem; padding: 7px 16px; }
+
+/* ---------- Try it: quiz ---------- */
 .quiz { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .q { background: var(--surface); border: 2px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; transition: border-color .25s, background .25s; }
 .q h3 { margin: 0; }
 .q .opts { display: flex; gap: 8px; flex-wrap: wrap; }
-.q .opts button { border: 1px solid var(--line); background: var(--chip); color: var(--fg); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 0.9rem; transition: transform .15s; }
-.q .opts button:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--fg); }
+.q .opts button { border: 1px solid var(--line); background: var(--chip); color: var(--fg); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 0.9rem; }
 .q .opts button:disabled { cursor: default; opacity: 0.55; }
 .q .opts button.picked { opacity: 1; background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .q .why { margin: 0; font-size: 0.92rem; color: var(--muted); }
-.q .verdict { font-weight: 800; animation: pop .35s ease both; display: inline-block; }
+.verdict { font-weight: 800; animation: pop .35s ease both; display: inline-block; }
 .q.right { border-color: var(--good); background: var(--good-soft); }
 .q.right .verdict { color: var(--good); }
 .q.wrong { border-color: var(--red); background: var(--red-soft); }
@@ -134,11 +166,13 @@ h3 { font-size: 1.05rem; margin: 0 0 4px; }
 .score { font-weight: 700; }
 .ghost-btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 6px; padding: 8px 14px; font-weight: 600; }
 .ghost-btn:hover { border-color: var(--fg); }
+.meter { height: 8px; background: var(--chip); border-radius: 999px; overflow: hidden; flex: 1 1 160px; max-width: 260px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--good); transition: width .4s; }
 
-/* Demo */
-.demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 40px; }
+/* ---------- Try it: notes demo ---------- */
+.demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 .pane { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
-.pane .tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 10px; }
+.tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 10px; }
 .notes { font-family: var(--mono); font-size: 0.86rem; line-height: 1.7; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .guide { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; min-height: 12em; }
 .guide li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; animation: rise .45s cubic-bezier(.2,.7,.2,1) both; }
@@ -149,14 +183,25 @@ h3 { font-size: 1.05rem; margin: 0 0 4px; }
 .empty { color: var(--muted); font-size: 0.95rem; margin: 0; }
 .run { margin-top: 14px; background: var(--red); color: #fff; border: 0; border-radius: 6px; padding: 10px 18px; font-weight: 700; }
 .run:hover { filter: brightness(1.08); }
-.fine { color: var(--muted); font-size: 0.88rem; margin: 10px 0 0; }
 
-/* Schedule */
-.filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
-.filter button { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 5px 14px; font-weight: 600; font-size: 0.9rem; }
-.filter button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
-.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
-table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.95rem; }
+/* ---------- Try it: prompt builder ---------- */
+.builder { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.field { display: grid; gap: 6px; margin-bottom: 14px; }
+.field label { font-weight: 700; font-size: 0.9rem; }
+.field input, .field select { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; width: 100%; min-width: 0; }
+.prompt-out { font-family: var(--mono); font-size: 0.88rem; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px; margin: 0; min-height: 12em; }
+.prompt-out mark { background: var(--red-soft); color: var(--red); font-weight: 700; border-radius: 3px; padding: 0 3px; }
+.copy-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.copied { color: var(--good); font-weight: 700; font-size: 0.9rem; }
+
+/* ---------- Schedule ---------- */
+.where { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 0 0 22px; }
+.where .card { padding: 14px 16px; }
+.where dt { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.where dd { margin: 2px 0 0; font-weight: 700; }
+.where dd a { font-weight: 600; font-size: 0.9rem; }
+.table-wrap { position: relative; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.95rem; }
 th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--chip); }
 tbody tr { transition: background .2s; }
@@ -164,14 +209,48 @@ tbody tr:hover { background: var(--chip); }
 tbody tr:last-child td { border-bottom: 0; }
 td.num { font-variant-numeric: tabular-nums; color: var(--muted); width: 2.5em; }
 td.date { white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+td.date small { display: block; color: var(--muted); font-weight: 600; font-size: 0.78rem; }
 td.topic { font-weight: 700; }
 td.lead { color: var(--muted); white-space: nowrap; }
-tr.next { background: var(--red-soft); }
-tr.next td.topic::after { content: "Next up"; margin-left: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; background: var(--red); border-radius: 999px; padding: 2px 8px; vertical-align: 2px; }
+td.add a { font-size: 0.82rem; font-weight: 700; white-space: nowrap; text-decoration: none; }
+td.add a:hover { text-decoration: underline; }
+tr.next, tr.next:hover { background: var(--red-soft); }
+.badge { display: inline-block; margin-left: 8px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #fff; background: var(--red); border-radius: 999px; padding: 2px 8px; vertical-align: 2px; }
 tr.done td { color: var(--muted); }
 tr.done td.topic { text-decoration: line-through; text-decoration-color: var(--line); }
+tr.off td { color: var(--muted); font-style: italic; }
+tr.off td.topic { font-weight: 600; }
 
-/* Project */
+/* Calendar view */
+.cal { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; max-width: 560px; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.cal-head h3 { margin: 0; font-family: var(--display); font-stretch: 85%; font-size: 1.3rem; }
+.cal-nav { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font-weight: 800; }
+.cal-nav:disabled { opacity: 0.35; cursor: default; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-grid .dow { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); text-align: center; padding: 4px 0; }
+.day { aspect-ratio: 1 / 1; border-radius: 8px; display: grid; place-items: center; font-size: 0.92rem; font-variant-numeric: tabular-nums; color: var(--muted); border: 1px solid transparent; background: none; padding: 0; }
+.day.blank { visibility: hidden; }
+.day.today { border-color: var(--fg); color: var(--fg); font-weight: 700; }
+.day.meet { background: var(--navy); color: #fff; font-weight: 800; position: relative; }
+.day.meet::after { content: ""; position: absolute; bottom: 14%; width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+.day.meet:hover { filter: brightness(1.2); }
+.day.meet.is-next { background: var(--red); }
+.day.meet.is-next::after { background: #fff; }
+.day.meet.is-done { background: var(--chip); color: var(--muted); }
+.day.meet.is-off { background: transparent; color: var(--muted); border: 1px dashed var(--muted); font-weight: 600; }
+.day.meet.is-off::after { display: none; }
+.day.meet[aria-pressed="true"] { outline: 3px solid var(--red); outline-offset: 1px; }
+.cal-detail { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 14px; min-height: 4.5em; }
+.cal-detail p { margin: 0; color: var(--muted); }
+.cal-detail strong { display: block; font-size: 1.05rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
+.legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; background: var(--navy); }
+.legend .l-next::before { background: var(--red); }
+.legend .l-done::before { background: var(--chip); border: 1px solid var(--line); }
+.legend .l-off::before { background: transparent; border: 1px dashed var(--muted); }
+
+/* ---------- Project timeline ---------- */
 .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; align-items: start; }
 .split > * { min-width: 0; }
 ul.checks { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
@@ -179,135 +258,130 @@ ul.checks li { padding-left: 26px; position: relative; }
 ul.checks li::before { content: ""; position: absolute; left: 4px; top: 0.55em; width: 10px; height: 10px; border-radius: 2px; background: var(--red); }
 ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
 ol.steps li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
-ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--on-navy); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+ol.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
 ol.steps li::after { content: ""; position: absolute; left: 14px; top: 32px; bottom: 2px; width: 2px; background: var(--line); }
 ol.steps li:last-child::after { display: none; }
 ol.steps li.now::before { background: var(--red); animation: pulse 1.6s infinite; }
 ol.steps li.past::before { background: var(--muted); }
 ol.steps .when { display: block; font-size: 0.82rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; }
 ol.steps strong { display: block; }
-ol.steps span.what { color: var(--muted); font-size: 0.95rem; }
+ol.steps .what { color: var(--muted); font-size: 0.95rem; }
 
-/* Team */
-.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+/* ---------- Projects gallery ---------- */
+.ptools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
+.ptools input { flex: 1 1 220px; min-width: 0; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; }
+.pcount { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.proj { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.proj:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(19,41,75,0.16); border-color: var(--red); }
+.thumb { height: 120px; background: var(--navy); position: relative; display: grid; place-items: center; color: #fff; font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: 2.2rem; overflow: hidden; }
+.thumb::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at var(--x, 20%) 30%, rgba(200,16,46,.55), transparent 55%), radial-gradient(circle at 85% 80%, rgba(185,196,220,.25), transparent 50%); }
+.thumb span { position: relative; }
+.proj.open { border-style: dashed; }
+.proj.open .thumb { background: var(--chip); color: var(--muted); }
+.proj.open .thumb::before { display: none; }
+.proj .body { padding: 16px; display: grid; gap: 8px; flex: 1; align-content: start; }
+.proj h3 { margin: 0; }
+.proj p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+.proj .who { font-size: 0.85rem; font-weight: 600; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 999px; padding: 2px 9px; background: var(--chip); color: var(--muted); }
+.pill.live { background: var(--good-soft); color: var(--good); }
+.pill.wip { background: var(--red-soft); color: var(--red); }
+.proj .go { padding: 0 16px 16px; font-weight: 700; font-size: 0.92rem; color: var(--muted); }
+.proj .go a { text-decoration: none; }
+.proj .go a:hover { text-decoration: underline; }
+.submit { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: var(--chip); border-radius: 10px; padding: 16px 18px; }
+.submit p { margin: 0; max-width: 60ch; }
+
+/* ---------- Perks ---------- */
+.perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.perk .emoji { font-size: 2rem; line-height: 1; display: block; margin-bottom: 10px; }
+.perk.big { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
+.perk.big p { color: var(--on-navy-muted); }
+
+/* ---------- Team ---------- */
+.team { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .person { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; min-width: 0; transition: transform .2s, box-shadow .2s; }
 .person:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(19,41,75,0.14); }
-.avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; transition: transform .3s; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #13294b, #2d4f8c); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; transition: transform .3s; }
 .person:hover .avatar { transform: rotate(-8deg) scale(1.06); }
 .avatar.founder { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--red); }
 .person .role { color: var(--muted); font-size: 0.88rem; line-height: 1.4; }
 .leads { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .leads span { font-size: 0.75rem; font-weight: 600; background: var(--chip); border-radius: 999px; padding: 2px 9px; }
 
-/* Join */
-.join { background: var(--navy); color: var(--on-navy); border-radius: 10px; padding: 28px; display: grid; gap: 14px; }
+/* ---------- FAQ ---------- */
+.faq { display: grid; gap: 10px; }
+.faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 0 18px; transition: border-color .2s; }
+.faq details[open] { border-color: var(--red); }
+.faq summary { cursor: pointer; list-style: none; font-weight: 700; padding: 14px 0; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--red); font-size: 1.3rem; line-height: 1; transition: transform .2s; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { margin: 0 0 16px; color: var(--muted); }
+
+/* ---------- Flyer ---------- */
+.flyer { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 28px; align-items: center; }
+.flyer img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px rgba(19,41,75,0.2); transition: transform .3s; }
+.flyer img:hover { transform: rotate(-1.5deg) scale(1.02); }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 640px) { .flyer { grid-template-columns: 1fr; } }
+
+/* ---------- Join ---------- */
+.join { background: var(--navy); color: var(--on-navy); border-radius: 12px; padding: 28px; display: grid; gap: 14px; }
 .join h2 { color: var(--on-navy); }
 .join p { margin: 0; color: var(--on-navy-muted); max-width: 60ch; }
 .join dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 6px 0 0; }
 .join dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--on-navy-muted); }
-.join dd { margin: 0; font-weight: 700; color: var(--on-navy); }
+.join dd { margin: 0; font-weight: 700; }
 .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
 .link-btn { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; padding: 11px 18px; border-radius: 6px; color: #ffffff; transition: transform .15s, filter .15s; }
 .link-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
 .link-btn.su { background: var(--red); }
 .link-btn.wa { background: #1f8a4c; }
-.link-btn.ig { background: transparent; border: 1px solid rgba(255,255,255,0.45); }
+.link-btn.ig { border: 1px solid rgba(255,255,255,0.45); }
 .link-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-/* Rules */
-.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-
-footer { margin-top: 64px; border-top: 1px solid var(--line); }
-footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem; }
-.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
-.foot-links { display: flex; gap: 18px; }
+/* ---------- Footer, back to top, toast ---------- */
+footer { margin-top: 72px; border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .foot-links a { color: var(--muted); font-weight: 600; }
 .foot-links a:hover { color: var(--red); }
-
-.flyer { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px; align-items: center; }
-.flyer img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 12px 30px rgba(19,41,75,0.2); transition: transform .3s; }
-.flyer img:hover { transform: rotate(-1.5deg) scale(1.02); }
-.flyer .btns { display: flex; flex-wrap: wrap; gap: 12px; }
-.btn.outline { color: var(--fg); border: 1px solid var(--line); background: var(--surface); }
-@media (max-width: 640px) { .flyer { grid-template-columns: 1fr; } }
-
-/* Active nav link */
-nav a.active { color: var(--on-navy); }
-nav a.active::after { transform: scaleX(1); }
-
-/* Spring preview */
-.spring { margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; background: var(--surface); border: 1px dashed var(--red); border-radius: 10px; padding: 16px 18px; }
-.spring .badge { background: var(--red); color: #fff; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
-.spring p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-.spring b { color: var(--fg); }
-@media (max-width: 520px) { .spring { grid-template-columns: 1fr; } .spring .badge { justify-self: start; } }
-
-/* Projects gallery */
-.ptools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
-.ptools input { flex: 1 1 220px; min-width: 0; font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; }
-.ptools input:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
-.pcount { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
-.projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-.proj { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; transition: transform .2s, box-shadow .2s, border-color .2s; }
-.proj:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(19,41,75,0.16); border-color: var(--red); }
-.proj .thumb { height: 120px; background: var(--navy); position: relative; display: grid; place-items: center; color: #fff; font-family: var(--display); font-stretch: 80%; font-weight: 800; font-size: 2.2rem; letter-spacing: 0.02em; overflow: hidden; }
-.proj .thumb::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 30%, rgba(200,16,46,.55), transparent 55%), radial-gradient(circle at 85% 80%, rgba(185,196,220,.25), transparent 50%); }
-.proj .thumb span { position: relative; }
-.proj .thumb.alt::before { background: radial-gradient(circle at 80% 20%, rgba(200,16,46,.5), transparent 55%), radial-gradient(circle at 10% 90%, rgba(95,208,143,.25), transparent 50%); }
-.proj .thumb.open { background: var(--chip); color: var(--muted); border-bottom: 1px dashed var(--line); }
-.proj .thumb.open::before { display: none; }
-.proj .body { padding: 16px; display: grid; gap: 8px; flex: 1; align-content: start; }
-.proj h3 { margin: 0; }
-.proj p { margin: 0; color: var(--muted); font-size: 0.93rem; }
-.proj .who { font-size: 0.85rem; font-weight: 600; color: var(--fg); }
-.proj .meta { display: flex; flex-wrap: wrap; gap: 6px; }
-.pill { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-radius: 999px; padding: 2px 9px; background: var(--chip); color: var(--muted); }
-.pill.live { background: var(--good-soft); color: var(--good); }
-.pill.wip { background: var(--red-soft); color: var(--red); }
-.proj .go { margin-top: auto; padding: 0 16px 16px; }
-.proj .go a, .proj .go span { font-weight: 700; font-size: 0.92rem; text-decoration: none; }
-.proj .go span { color: var(--muted); }
-.proj .go a:hover { text-decoration: underline; }
-.proj.open { border-style: dashed; }
-.pempty { color: var(--muted); margin: 8px 0 0; }
-.submit { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: var(--chip); border-radius: 10px; padding: 16px 18px; }
-.submit p { margin: 0; max-width: 60ch; }
-
-/* Perks */
-.perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
-.perk { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; position: relative; overflow: hidden; transition: transform .2s, border-color .2s; }
-.perk:hover { transform: translateY(-3px) rotate(-0.4deg); border-color: var(--red); }
-.perk .emoji { font-size: 2rem; line-height: 1; display: block; margin-bottom: 10px; }
-.perk p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-.perk.big { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
-.perk.big p { color: var(--on-navy-muted); }
-.facts li.treat { border-color: rgba(255,255,255,0.4); }
-
-/* Back to top */
-.totop { position: fixed; right: 16px; bottom: 16px; z-index: 9; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--red); color: #fff; font-size: 1.2rem; font-weight: 800; box-shadow: 0 6px 16px rgba(0,0,0,0.25); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .25s, transform .25s; }
+.totop { position: fixed; right: 16px; bottom: 16px; z-index: 15; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--red); color: #fff; font-size: 1.2rem; font-weight: 800; box-shadow: 0 6px 16px rgba(0,0,0,0.25); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .25s, transform .25s; }
 .totop.show { opacity: 1; transform: none; pointer-events: auto; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 20px); z-index: 25; background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 14px; font-weight: 700; font-size: 0.92rem; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="nav">
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
   <div class="wrap">
     <a class="brand" href="#top">AI <span>Scholars</span></a>
-    <nav aria-label="Sections">
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#try">Try it</a></li>
-        <li><a href="#schedule">Schedule</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#perks">Perks</a></li>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#join">Join</a></li>
-        <li><a class="nav-cta" href="#flyer">Sign up</a></li>
-      </ul>
-    </nav>
+    <div class="nav-right">
+      <nav aria-label="Sections" id="site-nav">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#try">Try it</a></li>
+          <li><a href="#schedule">Schedule</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#perks">Perks</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a class="nav-cta" href="#join">Join</a></li>
+        </ul>
+      </nav>
+      <button type="button" class="icon-btn" id="theme-btn" aria-label="Switch light or dark mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button type="button" class="icon-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
   </div>
 </header>
 
+<!-- ===================== HERO ===================== -->
 <div class="hero" id="top">
   <canvas id="net" aria-hidden="true"></canvas>
   <div class="wrap">
@@ -315,14 +389,14 @@ nav a.active::after { transform: scaleX(1); }
     <h1 aria-label="Study smarter with AI"><span id="rot" aria-hidden="true">Study smarter</span><span class="caret" aria-hidden="true"></span><br><span aria-hidden="true">with <em>AI</em>.</span></h1>
     <p class="lead">AI Scholars teaches BHS students to turn class notes into study guides, make practice quizzes, organize their classes, and build their own learning websites, while using AI honestly and within school rules.</p>
     <ul class="facts">
-      <li class="live"><span class="live-dot" aria-hidden="true"></span><span id="next-chip">First session: Thursday, Oct 15</span></li>
-      <li>Thursdays, X block</li>
-      <li>No experience needed</li>
-      <li class="treat">Free snacks and gift cards</li>
+      <li class="live"><span class="live-dot" aria-hidden="true"></span><span id="next-chip">First meeting: Monday, Oct 26</span></li>
+      <li>Every X block (Day 3)</li>
+      <li>Room 214, Main Building</li>
+      <li>Free snacks and gift cards</li>
     </ul>
     <div class="cta">
-      <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up</a>
-      <a class="btn ghost" href="#projects">See member projects</a>
+      <a class="btn primary" data-link="form" href="#" target="_blank" rel="noopener">Sign up</a>
+      <button type="button" class="btn ghost" data-ics><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Add meetings to my calendar</button>
     </div>
   </div>
 </div>
@@ -331,41 +405,87 @@ nav a.active::after { transform: scaleX(1); }
 
   <div class="stats" aria-label="Club at a glance">
     <div class="stat"><b data-count="7">7</b><span>members so far</span></div>
-    <div class="stat"><b data-count="12">12</b><span>sessions this fall</span></div>
-    <div class="stat"><b data-count="4">4</b><span>co-founders</span></div>
+    <div class="stat"><b id="stat-meetings" data-count="24">24</b><span>meetings this year</span></div>
+    <div class="stat"><b id="stat-team" data-count="6">6</b><span>student leaders</span></div>
     <div class="stat"><b data-count="1">1</b><span>big website project</span></div>
   </div>
 
+  <!-- ===================== ABOUT ===================== -->
   <section id="about">
     <p class="kicker reveal">About</p>
     <h2 class="reveal">Use AI to understand, not to shortcut</h2>
     <p class="mission reveal">We teach BHS students how to use AI tools to study smarter, focusing on using AI to actually understand material, responsibly and within school rules.</p>
     <div class="grid">
-      <div class="tile reveal"><div class="ico" aria-hidden="true">01</div><h3>Study guides</h3><p>Turn a unit's notes into a clear guide, then check it for mistakes.</p></div>
-      <div class="tile reveal"><div class="ico" aria-hidden="true">02</div><h3>Quizzes and flashcards</h3><p>Make practice tests before exams and learn to spot bad questions.</p></div>
-      <div class="tile reveal"><div class="ico" aria-hidden="true">03</div><h3>Organized classes</h3><p>Keep each class's syllabus and notes in one place you can ask questions about.</p></div>
-      <div class="tile reveal"><div class="ico" aria-hidden="true">04</div><h3>Build things</h3><p>Learn vibe coding and Claude Code, then build a learning website with your group.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">01</div><h3>Study guides</h3><p>Turn a unit's notes into a clear guide, then check it for mistakes.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">02</div><h3>Quizzes and flashcards</h3><p>Make practice tests before exams and learn to spot bad questions.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">03</div><h3>Organized classes</h3><p>Keep each class's syllabus and notes in one place you can ask questions about.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">04</div><h3>Build things</h3><p>Learn vibe coding and Claude Code, then build a learning website with your group.</p></div>
     </div>
   </section>
 
+  <!-- ===================== TRY IT ===================== -->
   <section id="try">
     <p class="kicker reveal">Try it</p>
-    <h2 class="reveal">Is AI good at this?</h2>
-    <p class="intro reveal">Our first lesson in 60 seconds. Pick an answer for each card and see how you do.</p>
-    <div class="quiz" id="quiz">
-      <div class="q reveal" data-answer="good"><h3>Summarizing your class notes</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Great at condensing what you give it. Still check it didn't drop anything important.</p></div>
-      <div class="q reveal" data-answer="bad"><h3>Knowing today's news</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Its knowledge stops at a cutoff date unless it can search the web. Check a news source.</p></div>
-      <div class="q reveal" data-answer="good"><h3>Explaining a concept five different ways</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>One of its best uses. Ask for an analogy, a simpler version, or an example.</p></div>
-      <div class="q reveal" data-answer="bad"><h3>Long math with big numbers</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can slip on multi-step arithmetic. Use it to explain the method, and a calculator for the numbers.</p></div>
-      <div class="q reveal" data-answer="good"><h3>Writing practice quiz questions</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Fast and useful for studying. Just double-check the answer key.</p></div>
-      <div class="q reveal" data-answer="bad"><h3>Citing real sources</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can invent citations that look real. Always open the source yourself.</p></div>
-    </div>
-    <div class="scorebar"><span class="score" id="score" aria-live="polite">0 of 6 answered</span><button type="button" class="ghost-btn" id="reset">Start over</button></div>
+    <h2 class="reveal">Get a taste of the club</h2>
+    <p class="intro reveal">Three mini versions of real lessons. Pick one.</p>
 
-    <div class="demo">
-      <div class="pane reveal">
-        <p class="tag">Messy class notes</p>
-        <pre class="notes">bio unit 4 - cell resp!!
+    <div class="chips tabs" role="tablist" aria-label="Activities">
+      <button type="button" role="tab" id="tab-quiz" aria-controls="panel-quiz" aria-selected="true">Is AI good at this?</button>
+      <button type="button" role="tab" id="tab-builder" aria-controls="panel-builder" aria-selected="false" tabindex="-1">Prompt builder</button>
+      <button type="button" role="tab" id="tab-demo" aria-controls="panel-demo" aria-selected="false" tabindex="-1">Notes to study guide</button>
+    </div>
+
+    <!-- Quiz -->
+    <div role="tabpanel" id="panel-quiz" aria-labelledby="tab-quiz">
+      <div class="quiz" id="quiz">
+        <div class="q" data-answer="good"><h3>Summarizing your class notes</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Great at condensing what you give it. Still check it didn't drop anything important.</p></div>
+        <div class="q" data-answer="bad"><h3>Knowing today's news</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Its knowledge stops at a cutoff date unless it can search the web. Check a news source.</p></div>
+        <div class="q" data-answer="good"><h3>Explaining a concept five different ways</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>One of its best uses. Ask for an analogy, a simpler version, or an example.</p></div>
+        <div class="q" data-answer="bad"><h3>Long math with big numbers</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can slip on multi-step arithmetic. Use it to explain the method, and a calculator for the numbers.</p></div>
+        <div class="q" data-answer="good"><h3>Writing practice quiz questions</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>Fast and useful for studying. Just double-check the answer key.</p></div>
+        <div class="q" data-answer="bad"><h3>Citing real sources</h3><div class="opts"><button type="button" data-pick="good">Good at it</button><button type="button" data-pick="bad">Not reliable</button></div><p class="why" hidden>It can invent citations that look real. Always open the source yourself.</p></div>
+      </div>
+      <div class="scorebar"><span class="score" id="score" aria-live="polite">0 of 6 answered</span><div class="meter" aria-hidden="true"><i id="meter"></i></div><button type="button" class="ghost-btn" id="reset">Start over</button></div>
+    </div>
+
+    <!-- Prompt builder -->
+    <div role="tabpanel" id="panel-builder" aria-labelledby="tab-builder" hidden>
+      <div class="builder">
+        <div class="pane">
+          <p class="tag">Build your prompt</p>
+          <div class="field"><label for="pb-task">I want AI to…</label>
+            <select id="pb-task">
+              <option value="guide">Make a study guide from my notes</option>
+              <option value="quiz">Quiz me before a test</option>
+              <option value="explain">Explain something I don't get</option>
+              <option value="check">Check my answers for mistakes</option>
+              <option value="plan">Make a study plan</option>
+            </select></div>
+          <div class="field"><label for="pb-topic">Class and topic</label><input id="pb-topic" value="Biology: cell respiration" autocomplete="off"></div>
+          <div class="field"><label for="pb-level">My level</label>
+            <select id="pb-level"><option>9th grade</option><option selected>10th grade</option><option>11th grade</option><option>12th grade</option><option>AP / honors</option></select></div>
+          <div class="field"><label for="pb-style">Style</label>
+            <select id="pb-style">
+              <option value="simple">Simple and short</option>
+              <option value="examples">With real-world examples</option>
+              <option value="steps">Step by step</option>
+            </select></div>
+        </div>
+        <div class="pane">
+          <p class="tag">Your prompt · the 4 parts are highlighted</p>
+          <pre class="prompt-out" id="pb-out" aria-live="polite"></pre>
+          <div class="copy-row"><button type="button" class="run" id="pb-copy" style="margin:0">Copy prompt</button><span class="copied" id="pb-copied" hidden>Copied!</span></div>
+          <p class="fine">Good prompts have four parts: who you are, what you want, the details, and the format. That's lesson 2.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes demo -->
+    <div role="tabpanel" id="panel-demo" aria-labelledby="tab-demo" hidden>
+      <div class="demo">
+        <div class="pane">
+          <p class="tag">Messy class notes</p>
+          <pre class="notes">bio unit 4 - cell resp!!
 glucose + O2 -> CO2 + H2O + ATP (energy!!)
 3 stages?? glycolysis, krebs, ETC
 glycolysis = cytoplasm, no O2, 2 ATP
@@ -374,55 +494,67 @@ krebs = mitochondria (matrix) NADH FADH2
 ETC = inner membrane, most ATP (~32-34??)
 no O2 -> fermentation. lactic vs alcohol
 ASK about chemiosmosis on quiz??</pre>
-        <button type="button" class="run" id="run">Organize into a study guide</button>
+          <button type="button" class="run" id="run">Organize into a study guide</button>
+        </div>
+        <div class="pane">
+          <p class="tag">Study guide</p>
+          <ul class="guide" id="guide"><li class="empty" style="display:block;animation:none">Press the button to see what lesson 3 teaches.</li></ul>
+        </div>
       </div>
-      <div class="pane reveal">
-        <p class="tag">Study guide</p>
-        <ul class="guide" id="guide"><li class="empty" style="display:block">Press the button to see what lesson 3 teaches.</li></ul>
-      </div>
+      <p class="fine">Example output written in advance. In the club we do this live and check it against the textbook.</p>
     </div>
-    <p class="fine">Example output for this demo, written in advance. In the club we do this live and check it against the textbook.</p>
   </section>
 
+  <!-- ===================== SCHEDULE ===================== -->
   <section id="schedule">
-    <p class="kicker reveal">Fall semester</p>
-    <h2 class="reveal">Weekly schedule</h2>
-    <p class="intro reveal">Twelve Thursday sessions from Oct 15 to Jan 21. We skip Thanksgiving week and winter break. Filter by who's leading.</p>
-    <div class="filter" role="group" aria-label="Filter by lead">
-      <button type="button" data-who="all" aria-pressed="true">Everyone</button>
-      <button type="button" data-who="Guy" aria-pressed="false">Guy</button>
-      <button type="button" data-who="Jayden" aria-pressed="false">Jayden</button>
-      <button type="button" data-who="Xavier" aria-pressed="false">Xavier</button>
-      <button type="button" data-who="Vid" aria-pressed="false">Vid</button>
-      <button type="button" data-who="Tagir" aria-pressed="false">Tagir</button>
+    <p class="kicker reveal">2026–27 schedule</p>
+    <h2 class="reveal">We meet every X block</h2>
+    <p class="intro reveal">X block happens on Day 3 of the six-day rotation, so it lands on a different weekday each time (usually every 8 calendar days). Add the meetings to your calendar so you never have to count.</p>
+
+    <dl class="where">
+      <div class="card reveal"><dt>When</dt><dd>X block · Day 3</dd><dd id="where-time">2:25–3:05 PM</dd></div>
+      <div class="card reveal"><dt>Where</dt><dd>Room 214, Main Building</dd><dd><a id="map-link" href="#" target="_blank" rel="noopener">115 Greenough St · Map</a></dd></div>
+      <div class="card reveal"><dt>Next meeting</dt><dd id="where-next">Mon, Oct 26</dd><dd id="where-count" style="color:var(--muted);font-weight:600"></dd></div>
+    </dl>
+
+    <div class="toolbar">
+      <div class="chips" role="group" aria-label="Filter by lead" id="lead-filter"></div>
+      <div class="chips" role="group" aria-label="View">
+        <button type="button" data-view="list" aria-pressed="true">List</button>
+        <button type="button" data-view="cal" aria-pressed="false">Calendar</button>
+        <button type="button" data-ics>Download .ics</button>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>Thursday</th><th>Topic</th><th>What we do</th><th>Lead</th></tr></thead>
-        <tbody id="sched">
-          <tr data-date="2026-10-15"><td class="num">1</td><td class="date">Oct 15</td><td class="topic">Kickoff: what AI is good and bad at</td><td>Live demo, ground rules, vote on topics</td><td class="lead">Guy, Jayden, Vid</td></tr>
-          <tr data-date="2026-10-22"><td class="num">2</td><td class="date">Oct 22</td><td class="topic">Prompting that works</td><td>Rewrite weak prompts using the four parts of a good one</td><td class="lead">Vid</td></tr>
-          <tr data-date="2026-10-29"><td class="num">3</td><td class="date">Oct 29</td><td class="topic">Study guides from your notes</td><td>Turn real notes into a guide; check it for errors</td><td class="lead">Xavier</td></tr>
-          <tr data-date="2026-11-05"><td class="num">4</td><td class="date">Nov 5</td><td class="topic">Practice quizzes and flashcards</td><td>Make a quiz, then hunt for bad questions</td><td class="lead">Jayden</td></tr>
-          <tr data-date="2026-11-12"><td class="num">5</td><td class="date">Nov 12</td><td class="topic">Organizing your classes with Projects</td><td>Set up one class with its syllabus and notes</td><td class="lead">Guy</td></tr>
-          <tr data-date="2026-11-19"><td class="num">6</td><td class="date">Nov 19</td><td class="topic">Spot the mistake: AI awareness</td><td>Real or AI? Catch confident wrong answers</td><td class="lead">Tagir</td></tr>
-          <tr data-date="2026-12-03"><td class="num">7</td><td class="date">Dec 3</td><td class="topic">Hand-built vs AI-built: the website showdown</td><td>Vid's hand-coded site vs. the AI-built one</td><td class="lead">Vid</td></tr>
-          <tr data-date="2026-12-10"><td class="num">8</td><td class="date">Dec 10</td><td class="topic">Vibe coding + website project kickoff</td><td>Build a flashcard page by describing it</td><td class="lead">Jayden</td></tr>
-          <tr data-date="2026-12-17"><td class="num">9</td><td class="date">Dec 17</td><td class="topic">Reusable instructions and skills</td><td>Write a "quiz me" setup; groups form</td><td class="lead">Guy</td></tr>
-          <tr data-date="2027-01-07"><td class="num">10</td><td class="date">Jan 7</td><td class="topic">Building with Claude Code</td><td>Add a feature step by step; groups plan their sites</td><td class="lead">Tagir</td></tr>
-          <tr data-date="2027-01-14"><td class="num">11</td><td class="date">Jan 14</td><td class="topic">Midterm prep sprint</td><td>A real study plan for your hardest midterm</td><td class="lead">Xavier</td></tr>
-          <tr data-date="2027-01-21"><td class="num">12</td><td class="date">Jan 21</td><td class="topic">Showcase and spring planning</td><td>Member demos and plans for spring</td><td class="lead">Everyone</td></tr>
-        </tbody>
-      </table>
+
+    <div id="view-list">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Date</th><th>Topic</th><th>What we do</th><th>Lead</th><th><span class="sr">Add to calendar</span></th></tr></thead>
+          <tbody id="sched"></tbody>
+        </table>
+      </div>
     </div>
-    <p class="fine">Dates may shift around the BHS calendar.</p>
-    <div class="spring reveal"><span class="badge">Coming in spring</span><p><b>AI and the businesses of the future.</b> How startups and companies are using AI right now, which jobs and industries it's changing, and a challenge to pitch your own AI-powered business idea to the club.</p></div>
+
+    <div id="view-cal" hidden>
+      <div class="cal">
+        <div class="cal-head">
+          <button type="button" class="cal-nav" id="cal-prev" aria-label="Previous month">‹</button>
+          <h3 id="cal-title" aria-live="polite"></h3>
+          <button type="button" class="cal-nav" id="cal-next" aria-label="Next month">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="legend"><span>Meeting</span><span class="l-next">Next up</span><span class="l-done">Done</span><span class="l-off">No X block</span></div>
+        <div class="cal-detail" id="cal-detail"><p>Tap a highlighted day to see that meeting.</p></div>
+      </div>
+    </div>
+    <p class="fine">Dates follow the BHS Day 3 rotation and can shift after snow days or schedule changes. We'll post any change in the WhatsApp group.</p>
   </section>
 
+  <!-- ===================== MAIN PROJECT ===================== -->
   <section id="project">
     <p class="kicker reveal">Main project</p>
     <h2 class="reveal">Build a learning website with your group</h2>
-    <p class="intro reveal">Groups of 2–3 design and build a website that helps students learn a topic from a BHS class, like a biology unit, a history period, or Spanish vocabulary. You'll use vibe coding and Claude Code and learn how websites work along the way. At the end, every group presents at a showcase.</p>
+    <p class="intro reveal">Groups of 2–3 design and build a website that helps students learn a topic from a BHS class, like a biology unit, a history period, or Spanish vocabulary. You'll use vibe coding and Claude Code and learn how websites work along the way. Every group presents at the June showcase.</p>
     <div class="split">
       <div class="reveal">
         <h3>Every site includes</h3>
@@ -440,27 +572,18 @@ ASK about chemiosmosis on quiz??</pre>
       </div>
       <div class="reveal">
         <h3>Timeline</h3>
-        <ol class="steps" id="steps">
-          <li data-start="2026-12-10" data-end="2026-12-16"><span class="when">Dec 10</span><strong>Kickoff</strong><span class="what">Vibe coding demo and topic brainstorm</span></li>
-          <li data-start="2026-12-17" data-end="2027-01-06"><span class="when">Dec 17</span><strong>Form groups</strong><span class="what">Groups of 2–3 pick a class topic</span></li>
-          <li data-start="2027-01-07" data-end="2027-01-20"><span class="when">Jan 7–14</span><strong>Plan</strong><span class="what">Sketch pages and features; leads approve plans</span></li>
-          <li data-start="2027-01-21" data-end="2027-03-03"><span class="when">Jan 21 – Feb 25</span><strong>Build the first version</strong><span class="what">Get the topic explanation working</span></li>
-          <li data-start="2027-03-04" data-end="2027-03-10"><span class="when">Mar 4</span><strong>Midpoint check-in</strong><span class="what">2-minute progress demos and feedback</span></li>
-          <li data-start="2027-03-11" data-end="2027-04-14"><span class="when">Mar 11 – Apr 8</span><strong>Add interactive features</strong><span class="what">Quiz, flashcards, or game, plus "How we built it"</span></li>
-          <li data-start="2027-04-15" data-end="2027-05-05"><span class="when">Apr 15 and Apr 29</span><strong>Fact-check and test</strong><span class="what">Check every fact; swap sites with another group</span></li>
-          <li data-start="2027-05-06" data-end="2027-05-19"><span class="when">May 6–13</span><strong>Final fixes</strong><span class="what">Fix bugs and polish the design</span></li>
-          <li data-start="2027-05-20" data-end="2027-05-26"><span class="when">May 20</span><strong>Showcase</strong><span class="what">Present to the club, advisor, and invited teachers</span></li>
-        </ol>
+        <ol class="steps" id="steps"></ol>
       </div>
     </div>
   </section>
 
+  <!-- ===================== PROJECTS GALLERY ===================== -->
   <section id="projects">
     <p class="kicker reveal">Member projects</p>
     <h2 class="reveal">See what members are building</h2>
-    <p class="intro reveal">Every project from the club lives here: group learning websites, study tools, and experiments. Group projects start Dec 10, so the open slots below will fill up over the year.</p>
+    <p class="intro reveal">Every project from the club lives here: group learning websites, study tools, and experiments. Group projects start in late January, so the open slots will fill up over the year.</p>
     <div class="ptools">
-      <div class="filter" role="group" aria-label="Filter projects" id="pfilter" style="margin:0">
+      <div class="chips" role="group" aria-label="Filter projects" id="pfilter">
         <button type="button" data-status="all" aria-pressed="true">All</button>
         <button type="button" data-status="live" aria-pressed="false">Live</button>
         <button type="button" data-status="wip" aria-pressed="false">In progress</button>
@@ -469,281 +592,520 @@ ASK about chemiosmosis on quiz??</pre>
       <input type="search" id="psearch" placeholder="Search by name, topic, or member" aria-label="Search projects">
       <span class="pcount" id="pcount" aria-live="polite"></span>
     </div>
-
-    <div class="projects" id="plist">
-      <!-- TO ADD A PROJECT: copy one <article> block, paste it at the top of this list, and change the text.
-           data-status: live, wip, or open. Put the project's link in the href. -->
-
-      <article class="proj reveal" data-status="live">
-        <div class="thumb"><span>AI</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill live">Live</span><span class="pill">Club</span></div>
-          <h3>The AI Scholars website</h3>
-          <div class="who">Guy Berkovitz · Vid Rajlic</div>
-          <p>This site. Built with AI help: a live schedule, the "Is AI good at this?" quiz, and this projects page.</p>
-        </div>
-        <div class="go"><a href="https://aischolarsclub.github.io/">Open project →</a></div>
-      </article>
-
-      <article class="proj reveal" data-status="wip">
-        <div class="thumb alt"><span>VS</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill wip">In progress</span><span class="pill">Coding</span></div>
-          <h3>Hand-built vs AI-built showdown</h3>
-          <div class="who">Vid Rajlic</div>
-          <p>The same website built twice, once by hand and once with AI. Compared side by side on Dec 3.</p>
-        </div>
-        <div class="go"><span>Demo on Dec 3</span></div>
-      </article>
-
-      <article class="proj open reveal" data-status="open">
-        <div class="thumb open"><span>Bio</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill">Open slot</span><span class="pill">Science</span></div>
-          <h3>Your group's learning website</h3>
-          <div class="who">Group of 2–3</div>
-          <p>Example idea: a cell respiration explainer with a quiz and flashcards for Biology.</p>
-        </div>
-        <div class="go"><span>Groups form Dec 17</span></div>
-      </article>
-
-      <article class="proj open reveal" data-status="open">
-        <div class="thumb open"><span>Hist</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill">Open slot</span><span class="pill">History</span></div>
-          <h3>Your group's learning website</h3>
-          <div class="who">Group of 2–3</div>
-          <p>Example idea: an interactive timeline of a history unit with a review game.</p>
-        </div>
-        <div class="go"><span>Groups form Dec 17</span></div>
-      </article>
-
-      <article class="proj open reveal" data-status="open">
-        <div class="thumb open"><span>Esp</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill">Open slot</span><span class="pill">Languages</span></div>
-          <h3>Your group's learning website</h3>
-          <div class="who">Group of 2–3</div>
-          <p>Example idea: Spanish vocab flashcards that quiz you on the words you miss most.</p>
-        </div>
-        <div class="go"><span>Groups form Dec 17</span></div>
-      </article>
-
-      <article class="proj open reveal" data-status="open">
-        <div class="thumb open"><span>+</span></div>
-        <div class="body">
-          <div class="meta"><span class="pill">Open slot</span><span class="pill">Anything</span></div>
-          <h3>Your own idea</h3>
-          <div class="who">Any member</div>
-          <p>Built a study tool, a prompt that works, or a cool experiment? It belongs here too.</p>
-        </div>
-        <div class="go"><span>Send us the link</span></div>
-      </article>
-    </div>
-    <p class="pempty" id="pempty" hidden>No projects match that search yet.</p>
-
+    <div class="projects" id="plist"></div>
+    <p class="empty" id="pempty" hidden style="margin-top:10px">No projects match that search yet.</p>
     <div class="submit reveal">
       <p><b>Want your project on this page?</b> Send the link and your group's names to any officer or in the WhatsApp group, and we'll add it.</p>
-      <a class="btn primary" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">Share your project</a>
+      <a class="btn primary" data-link="whatsapp" href="#" target="_blank" rel="noopener">Share your project</a>
     </div>
   </section>
 
+  <!-- ===================== PERKS ===================== -->
   <section id="perks">
     <p class="kicker reveal">Perks</p>
     <h2 class="reveal">Snacks, gift cards, and prizes all year</h2>
     <p class="intro reveal">Learning is better with food. We give away snacks and gift cards often throughout the year, so it pays to show up.</p>
     <div class="perks">
-      <div class="perk big reveal"><span class="emoji" aria-hidden="true">🎁</span><h3>Gift card giveaways</h3><p>Regular gift card raffles and prizes for members throughout the school year.</p></div>
-      <div class="perk reveal"><span class="emoji" aria-hidden="true">🍪</span><h3>Snacks at meetings</h3><p>Snacks at our Thursday meetings, all year long.</p></div>
-      <div class="perk reveal"><span class="emoji" aria-hidden="true">🏆</span><h3>Challenge prizes</h3><p>Win the in-club quiz games and prompt challenges to earn rewards.</p></div>
-      <div class="perk reveal"><span class="emoji" aria-hidden="true">🎉</span><h3>Showcase celebration</h3><p>Prizes and a party for the best projects at the May showcase.</p></div>
+      <div class="card perk big reveal"><span class="emoji" aria-hidden="true">🎁</span><h3>Gift card giveaways</h3><p>Regular gift card raffles and prizes for members throughout the school year.</p></div>
+      <div class="card perk reveal"><span class="emoji" aria-hidden="true">🍪</span><h3>Snacks at meetings</h3><p>Snacks at our meetings, all year long.</p></div>
+      <div class="card perk reveal"><span class="emoji" aria-hidden="true">🏆</span><h3>Challenge prizes</h3><p>Win the in-club quiz games and prompt challenges to earn rewards.</p></div>
+      <div class="card perk reveal"><span class="emoji" aria-hidden="true">🎉</span><h3>Showcase celebration</h3><p>Prizes and a party for the best projects at the June showcase.</p></div>
     </div>
   </section>
 
+  <!-- ===================== TEAM ===================== -->
   <section id="team">
-    <p class="kicker reveal">Officers</p>
+    <p class="kicker reveal">Leadership</p>
     <h2 class="reveal">Who runs AI Scholars</h2>
-    <p class="intro reveal">Founded by four 10th graders. Every lesson has a lead from the team; red rings mark co-founders.</p>
-    <div class="team">
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">GB</div><div><h3>Guy Berkovitz</h3><div class="role">Co-founder · Co-president · Website designer · Workshop lead: Claude for files and tasks</div><div class="leads"><span>Kickoff · Oct 15</span><span>Projects · Nov 12</span><span>Skills · Dec 17</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">JZ</div><div><h3>Jayden Zhou</h3><div class="role">Co-founder · Co-president · Workshop lead: vibe coding</div><div class="leads"><span>Kickoff · Oct 15</span><span>Quizzes · Nov 5</span><span>Vibe coding · Dec 10</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">XW</div><div><h3>Xavier Wu</h3><div class="role">Co-founder · Secretary · Workshop lead: study guides and midterm prep</div><div class="leads"><span>Study guides · Oct 29</span><span>Midterm sprint · Jan 14</span></div></div></div>
-      <div class="person reveal"><div class="avatar founder" aria-hidden="true">VR</div><div><h3>Vid Rajlic</h3><div class="role">Co-founder · Secretary · Website designer · Workshop lead: Claude Code</div><div class="leads"><span>Kickoff · Oct 15</span><span>Prompting · Oct 22</span><span>Website showdown · Dec 3</span></div></div></div>
-      <div class="person reveal"><div class="avatar" aria-hidden="true">TP</div><div><h3>Tagir Parchiev</h3><div class="role">Co-workshop leader</div><div class="leads"><span>AI awareness · Nov 19</span><span>Claude Code · Jan 7</span></div></div></div>
+    <p class="intro reveal">Founded by four 10th graders. Every lesson has a lead from the team; red rings mark co-founders. Tap a name in the schedule filter to see what each person leads.</p>
+    <div class="team" id="team-list"></div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section id="faq">
+    <p class="kicker reveal">FAQ</p>
+    <h2 class="reveal">Questions people ask</h2>
+    <div class="faq">
+      <details class="reveal"><summary>Do I need to know anything about AI or coding?</summary><p>No. We start from the basics, and plenty of members have never used AI for school before.</p></details>
+      <details class="reveal"><summary>Why does the meeting day keep changing?</summary><p>We meet during X block, which is part of Day 3 in the BHS six-day rotation. Since the rotation doesn't line up with the week, the weekday changes. Tap "Add meetings to my calendar" and every meeting shows up on your phone.</p></details>
+      <details class="reveal"><summary>What should I bring?</summary><p>A laptop if you have one, plus notes from a class you want to study for. No laptop? Pair up with someone.</p></details>
+      <details class="reveal"><summary>Is using AI for school allowed?</summary><p>It depends on the teacher, and that's our first ground rule: always follow each teacher's AI policy. We teach you to use AI to understand material, never to do your work for you.</p></details>
+      <details class="reveal"><summary>What if I miss a meeting?</summary><p>No problem. Ask in the WhatsApp group and an officer will catch you up. You can join at any point in the year.</p></details>
+      <details class="reveal"><summary>How do the gift cards work?</summary><p>We run giveaways and challenge prizes throughout the year. Come to meetings and watch the WhatsApp group for announcements.</p></details>
     </div>
   </section>
 
+  <!-- ===================== FLYER ===================== -->
   <section id="flyer">
     <p class="kicker reveal">Spread the word</p>
-    <h2 class="reveal">Sign up for AI Scholars</h2>
+    <h2 class="reveal">Share the flyer</h2>
     <div class="flyer">
       <img class="reveal" src="flyer.jpg" alt="AI Scholars flyer with the Brookline High School Spartan logo and a QR code to sign up" width="1545" height="1999" loading="lazy">
       <div class="reveal">
-        <p class="intro">Scan the code on the flyer or use the button below to fill out the sign-up form. Share the flyer with friends or print it for the hallway.</p>
+        <p class="intro">Scan the code on the flyer or use the button below to fill out the sign-up form. Share it with friends or print it for the hallway.</p>
         <div class="btns">
-          <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Sign up now</a>
+          <a class="btn primary" data-link="form" href="#" target="_blank" rel="noopener">Sign up now</a>
           <a class="btn outline" href="flyer.jpg" download>Download the flyer</a>
+          <button type="button" class="btn outline" id="share-btn">Share the website</button>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===================== JOIN ===================== -->
   <section id="join">
     <div class="join reveal">
       <h2>Join AI Scholars</h2>
-      <p>Anyone at BHS can join, whether you've never used AI or use it every day. Fill out the sign-up form, join our WhatsApp group for meeting updates, or just show up to a meeting.</p>
+      <p>Anyone at BHS can join, whether you've never used AI or use it every day. Fill out the sign-up form, join our WhatsApp group for meeting reminders, or just show up.</p>
       <dl>
-        <div><dt>When</dt><dd>Thursdays, X block</dd></div>
-        <div><dt>How long</dt><dd>45 minutes</dd></div>
-        <div><dt>Where</dt><dd>Room: 214</dd></div>
-        <div><dt>First meeting</dt><dd>Thursday, Oct 15</dd></div>
+        <div><dt>When</dt><dd>Every X block (Day 3)</dd></div>
+        <div><dt>Time</dt><dd id="join-time">2:25–3:05 PM</dd></div>
+        <div><dt>Where</dt><dd>Room 214, Main Building</dd></div>
+        <div><dt>First meeting</dt><dd id="join-first">Monday, Oct 26</dd></div>
       </dl>
       <div class="links">
-        <a class="link-btn su" href="https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform" target="_blank" rel="noopener">Fill out the sign-up form</a>
-        <a class="link-btn wa" href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>Join the WhatsApp group</a>
-        <a class="link-btn ig" href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9a6.6 6.6 0 0 0-1.8-4.7A6.6 6.6 0 0 0 15.4 1.4C13.6 1.3 10.4 1.3 8.6 1.4a6.6 6.6 0 0 0-4.7 1.8A6.6 6.6 0 0 0 2.1 7.9c-.1 1.8-.1 7.2 0 9a6.6 6.6 0 0 0 1.8 4.7 6.6 6.6 0 0 0 4.7 1.8c1.8.1 7.2.1 9 0a6.6 6.6 0 0 0 4.7-1.8 6.6 6.6 0 0 0 1.8-4.7c.1-1.8.1-7.2 0-9zm-2.2 11a3.4 3.4 0 0 1-1.9 1.9c-1.3.5-4.4.4-5.8.4s-4.5.1-5.8-.4a3.4 3.4 0 0 1-1.9-1.9c-.5-1.3-.4-4.4-.4-5.8s-.1-4.5.4-5.8a3.4 3.4 0 0 1 1.9-1.9c1.3-.5 4.4-.4 5.8-.4s4.5-.1 5.8.4a3.4 3.4 0 0 1 1.9 1.9c.5 1.3.4 4.4.4 5.8s.1 4.5-.4 5.8z"/></svg>Follow @aischolarsclub</a>
+        <a class="link-btn su" data-link="form" href="#" target="_blank" rel="noopener">Fill out the sign-up form</a>
+        <a class="link-btn wa" data-link="whatsapp" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>Join the WhatsApp group</a>
+        <a class="link-btn ig" data-link="instagram" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9a6.6 6.6 0 0 0-1.8-4.7A6.6 6.6 0 0 0 15.4 1.4C13.6 1.3 10.4 1.3 8.6 1.4a6.6 6.6 0 0 0-4.7 1.8A6.6 6.6 0 0 0 2.1 7.9c-.1 1.8-.1 7.2 0 9a6.6 6.6 0 0 0 1.8 4.7 6.6 6.6 0 0 0 4.7 1.8c1.8.1 7.2.1 9 0a6.6 6.6 0 0 0 4.7-1.8 6.6 6.6 0 0 0 1.8-4.7c.1-1.8.1-7.2 0-9zm-2.2 11a3.4 3.4 0 0 1-1.9 1.9c-1.3.5-4.4.4-5.8.4s-4.5.1-5.8-.4a3.4 3.4 0 0 1-1.9-1.9c-.5-1.3-.4-4.4-.4-5.8s-.1-4.5.4-5.8a3.4 3.4 0 0 1 1.9-1.9c1.3-.5 4.4-.4 5.8-.4s4.5-.1 5.8.4a3.4 3.4 0 0 1 1.9 1.9c.5 1.3.4 4.4.4 5.8s.1 4.5-.4 5.8z"/></svg>Follow @aischolarsclub</a>
       </div>
     </div>
   </section>
 
+  <!-- ===================== GROUND RULES ===================== -->
   <section id="members">
     <p class="kicker reveal">For members</p>
     <h2 class="reveal">Ground rules</h2>
     <p class="intro reveal">Every member agrees to these. They keep the club useful and keep everyone out of trouble.</p>
-    <div class="rules">
-      <div class="tile reveal"><h3>Follow each teacher's AI rules</h3><p>When you're not sure what's allowed, ask the teacher.</p></div>
-      <div class="tile reveal"><h3>Learn, don't outsource</h3><p>Use AI to explain, quiz, and review. Never turn in AI-written work as your own.</p></div>
-      <div class="tile reveal"><h3>Always check</h3><p>Compare AI answers to your notes or textbook. AI can be confidently wrong.</p></div>
-      <div class="tile reveal"><h3>Protect privacy</h3><p>No other students' names, grades, or personal info in AI tools. Only upload class materials you're allowed to share.</p></div>
+    <div class="grid">
+      <div class="card reveal"><h3>Follow each teacher's AI rules</h3><p>When you're not sure what's allowed, ask the teacher.</p></div>
+      <div class="card reveal"><h3>Learn, don't outsource</h3><p>Use AI to explain, quiz, and review. Never turn in AI-written work as your own.</p></div>
+      <div class="card reveal"><h3>Always check</h3><p>Compare AI answers to your notes or textbook. AI can be confidently wrong.</p></div>
+      <div class="card reveal"><h3>Protect privacy</h3><p>No other students' names, grades, or personal info in AI tools. Only upload class materials you're allowed to share.</p></div>
     </div>
   </section>
 
 </main>
 
 <footer>
-  <div class="wrap foot"><span>AI Scholars · Brookline High School · 2026–27</span><span class="foot-links"><a href="#projects">Projects</a><a href="https://www.instagram.com/aischolarsclub?utm_source=qr" target="_blank" rel="noopener">Instagram</a><a href="https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t" target="_blank" rel="noopener">WhatsApp group</a></span></div>
+  <div class="wrap">
+    <span>AI Scholars · Brookline High School · Room 214 · 2026–27</span>
+    <span class="foot-links"><a href="#schedule">Schedule</a><a href="#projects">Projects</a><a data-link="instagram" href="#" target="_blank" rel="noopener">Instagram</a><a data-link="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a></span>
+  </div>
 </footer>
 <button type="button" class="totop" id="totop" aria-label="Back to top">↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+/* =================================================================
+   ===================  EDIT HERE  =================================
+   Everything you'll usually want to change is in this section.
+   Rules so nothing breaks:
+     • Keep the quotes "..." around every piece of text.
+     • Keep the commas at the end of each line/item.
+     • Don't use " inside text. Use ' instead (like don't).
+     • Dates are written "YYYY-MM-DD", for example "2026-10-26".
+   ================================================================= */
+
+var LINKS = {
+  form: "https://docs.google.com/forms/d/e/1FAIpQLScLKMY8FK9SGs4NZcy8BpmsQZUkfdB7S1P2FMPs8dcCOaAx8w/viewform",
+  whatsapp: "https://chat.whatsapp.com/GlAbPpJHyqFKM9fcnL9f6R?mode=gi_t",
+  instagram: "https://www.instagram.com/aischolarsclub?utm_source=qr",
+  site: "https://aischolarsclub.github.io/"
+};
+
+var PLACE = {
+  room: "Room 214, Main Building",
+  address: "115 Greenough St, Brookline, MA 02445",
+  start: "14:25",   // X block start time (24-hour clock)
+  end: "15:05"      // X block end time
+};
+
+/* MEETINGS: one line per X block.
+   [ date, topic, what we do, lead ]
+   For a day with no meeting, write "OFF" as the lead
+   and put the reason as the topic. */
+var MEETINGS = [
+  ["2026-10-26", "Kickoff: what AI is good and bad at", "Live demo, ground rules, vote on topics", "Guy, Jayden, Vid"],
+  ["2026-11-04", "Prompting that works", "Rewrite weak prompts using the four parts of a good one", "Vid"],
+  ["2026-11-13", "Study guides from your notes", "Turn real notes into a guide; check it for errors", "Xavier"],
+  ["2026-11-23", "Practice quizzes and flashcards", "Make a quiz, then hunt for bad questions", "Jayden"],
+  ["2026-12-03", "No X block: early release day", "", "OFF"],
+  ["2026-12-11", "Organizing your classes with Projects", "Set up one class with its syllabus and notes", "Guy"],
+  ["2026-12-21", "Spot the mistake: AI awareness", "Real or AI? Catch confident wrong answers. Holiday snacks!", "Tagir, Iddo"],
+  ["2027-01-07", "Hand-built vs AI-built: the website showdown", "Vid's hand-coded site vs. the AI-built one", "Vid"],
+  ["2027-01-15", "Midterm prep sprint", "A real study plan for your hardest midterm", "Xavier"],
+  ["2027-01-26", "Vibe coding + website project kickoff", "Build a flashcard page just by describing it", "Jayden"],
+  ["2027-02-03", "Reusable instructions and skills", "Write a 'quiz me' setup; project groups form", "Guy"],
+  ["2027-02-11", "Building with Claude Code", "Add a feature step by step; groups plan their sites", "Tagir, Iddo"],
+  ["2027-02-26", "Project work: first version", "Groups build their topic explanation", "Everyone"],
+  ["2027-03-08", "Project work: first version", "Keep building; officers check in with each group", "Everyone"],
+  ["2027-03-17", "Midpoint check-in", "2-minute progress demos and feedback", "Everyone"],
+  ["2027-03-25", "AI and the businesses of the future", "How companies use AI, which jobs it's changing, and startup ideas", "Guy, Jayden"],
+  ["2027-04-05", "Project work: interactive features", "Add a quiz, flashcards, or a review game", "Everyone"],
+  ["2027-04-13", "Project work: How we built it", "Write the page about what AI did and didn't do", "Everyone"],
+  ["2027-04-28", "Fact-check and test", "Check every fact; swap sites with another group", "Xavier"],
+  ["2027-05-06", "Pitch your AI business", "Pitch an AI-powered business idea to the club. Prizes!", "Guy, Jayden"],
+  ["2027-05-14", "Final fixes", "Fix bugs and polish the design", "Everyone"],
+  ["2027-05-24", "Showcase rehearsal", "Practice demos and get feedback", "Everyone"],
+  ["2027-06-02", "Showcase", "Present to the club, advisor, and invited teachers", "Everyone"],
+  ["2027-06-10", "Celebration + gift card raffle", "Awards, snacks, and the big giveaway", "Everyone"],
+  ["2027-06-18", "Next year planning", "What worked, what to change, and new leaders", "Everyone"]
+];
+
+/* PROJECT TIMELINE: [ label shown, title, description, start date, end date ] */
+var TIMELINE = [
+  ["Jan 26", "Kickoff", "Vibe coding demo and topic brainstorm", "2027-01-26", "2027-02-02"],
+  ["Feb 3", "Form groups", "Groups of 2–3 pick a class topic", "2027-02-03", "2027-02-10"],
+  ["Feb 11", "Plan", "Sketch pages and features; leads approve plans", "2027-02-11", "2027-02-25"],
+  ["Feb 26 – Mar 8", "Build the first version", "Get the topic explanation working", "2027-02-26", "2027-03-16"],
+  ["Mar 17", "Midpoint check-in", "2-minute progress demos and feedback", "2027-03-17", "2027-04-04"],
+  ["Apr 5 – 13", "Add interactive features", "Quiz, flashcards, or game, plus 'How we built it'", "2027-04-05", "2027-04-27"],
+  ["Apr 28", "Fact-check and test", "Check every fact; swap sites with another group", "2027-04-28", "2027-05-13"],
+  ["May 14 – 24", "Final fixes", "Fix bugs, polish, and rehearse", "2027-05-14", "2027-06-01"],
+  ["Jun 2", "Showcase", "Present to the club, advisor, and invited teachers", "2027-06-02", "2027-06-09"]
+];
+
+/* TEAM: short = first name used in the schedule's Lead column.
+   founder: true adds the red ring. Lesson chips are added automatically. */
+var TEAM = [
+  { name: "Guy Berkovitz", short: "Guy", initials: "GB", founder: true,
+    role: "Co-founder · Co-president · Website designer · Workshop lead: Claude for files and tasks" },
+  { name: "Jayden Zhou", short: "Jayden", initials: "JZ", founder: true,
+    role: "Co-founder · Co-president · Workshop lead: vibe coding" },
+  { name: "Xavier Wu", short: "Xavier", initials: "XW", founder: true,
+    role: "Co-founder · Secretary · Workshop lead: study guides and midterm prep" },
+  { name: "Vid Rajlic", short: "Vid", initials: "VR", founder: true,
+    role: "Co-founder · Secretary · Website designer · Workshop lead: Claude Code" },
+  { name: "Tagir Parchiev", short: "Tagir", initials: "TP", founder: false,
+    role: "Co-Director of Workshops" },
+  { name: "Iddo Schubert", short: "Iddo", initials: "IS", founder: false,
+    role: "Co-Director of Workshops" }
+];
+
+/* PROJECTS: status is "live", "wip" (in progress), or "open" (empty slot).
+   badge = the big letters on the card. Leave link "" if there's none yet. */
+var PROJECTS = [
+  { title: "The AI Scholars website", team: "Guy Berkovitz · Vid Rajlic", tag: "Club", status: "live", badge: "AI",
+    about: "This site. Built with AI help: a live schedule, a prompt builder, a quiz, and this projects page.",
+    link: "https://aischolarsclub.github.io/", note: "" },
+  { title: "Hand-built vs AI-built showdown", team: "Vid Rajlic", tag: "Coding", status: "wip", badge: "VS",
+    about: "The same website built twice, once by hand and once with AI, compared side by side.",
+    link: "", note: "Demo on Jan 7" },
+  { title: "Your group's learning website", team: "Group of 2–3", tag: "Science", status: "open", badge: "Bio",
+    about: "Example idea: a cell respiration explainer with a quiz and flashcards for Biology.",
+    link: "", note: "Groups form Feb 3" },
+  { title: "Your group's learning website", team: "Group of 2–3", tag: "History", status: "open", badge: "Hist",
+    about: "Example idea: an interactive timeline of a history unit with a review game.",
+    link: "", note: "Groups form Feb 3" },
+  { title: "Your group's learning website", team: "Group of 2–3", tag: "Languages", status: "open", badge: "Esp",
+    about: "Example idea: Spanish vocab flashcards that quiz you on the words you miss most.",
+    link: "", note: "Groups form Feb 3" },
+  { title: "Your own idea", team: "Any member", tag: "Anything", status: "open", badge: "+",
+    about: "Built a study tool, a prompt that works, or a cool experiment? It belongs here too.",
+    link: "", note: "Send us the link" }
+];
+
+/* =================================================================
+   =========  END OF EDIT SECTION. Code below runs the site.  =======
+   ================================================================= */
+
 (function () {
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var root = document.documentElement;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
-  var DAY = 86400000;
+  function at(d, hm) { var p = hm.split(':'); var x = new Date(d); x.setHours(+p[0], +p[1], 0, 0); return x; }
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MONTH = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var DOWL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  function short(d) { return DOW[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate(); }
+  function long(d) { return DOWL[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate(); }
+  function hm12(hm) { var p = hm.split(':'), h = +p[0]; return (h % 12 || 12) + ':' + p[1]; }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function stamp(d) { return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00'; }
+  var timeLabel = hm12(PLACE.start) + '–' + hm12(PLACE.end) + ' PM';
+  var toastEl = $('#toast'), toastT;
+  function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2600); }
 
-  /* Schedule: past / next, plus the live chip in the hero */
-  var rows = Array.prototype.slice.call(document.querySelectorAll('#sched tr'));
-  var next = null;
-  rows.forEach(function (r) {
-    var d = parse(r.getAttribute('data-date'));
-    if (d < today) r.classList.add('done');
-    else if (!next) { next = { row: r, date: d }; r.classList.add('next'); }
+  /* ---------- Theme (remembers your choice) ---------- */
+  try { var saved = localStorage.getItem('ais-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+
+  /* ---------- Links ---------- */
+  $$('[data-link]').forEach(function (a) { var u = LINKS[a.getAttribute('data-link')]; if (u) a.href = u; });
+  $('#map-link').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Brookline High School, ' + PLACE.address);
+  $('#where-time').textContent = timeLabel; $('#join-time').textContent = timeLabel;
+
+  /* ---------- Meetings ---------- */
+  var now = new Date(), today = new Date(now); today.setHours(0, 0, 0, 0);
+  var meetings = MEETINGS.map(function (m, i) {
+    var d = parse(m[0]);
+    return { i: i, date: d, start: at(d, PLACE.start), end: at(d, PLACE.end), topic: m[1], what: m[2], lead: m[3], off: m[3] === 'OFF' };
   });
-  var chip = document.getElementById('next-chip');
-  if (next) {
-    var days = Math.round((next.date - today) / DAY);
-    var name = next.row.querySelector('.topic').textContent.split(':')[0];
-    var when = days === 0 ? 'today' : days === 1 ? 'tomorrow' : 'in ' + days + ' days';
-    var first = next.row === rows[0];
-    chip.textContent = (first ? 'First session ' : name + ' ') + when + ' · Thu ' + next.row.querySelector('.date').textContent;
-  } else {
-    chip.textContent = 'Spring schedule coming soon';
+  var real = meetings.filter(function (m) { return !m.off; });
+  real.forEach(function (m, k) { m.n = k + 1; });
+  function findNext(t) { for (var k = 0; k < real.length; k++) if (real[k].end > t) return real[k]; return null; }
+  var next = findNext(now);
+  $('#stat-meetings').setAttribute('data-count', real.length); $('#stat-meetings').textContent = real.length;
+  $('#stat-team').setAttribute('data-count', TEAM.length); $('#stat-team').textContent = TEAM.length;
+  if (real.length) $('#join-first').textContent = long(real[0].date);
+
+  function gcal(m) {
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent('AI Scholars: ' + m.topic) +
+      '&dates=' + stamp(m.start) + '/' + stamp(m.end) + '&ctz=America/New_York' +
+      '&location=' + encodeURIComponent(PLACE.room + ', ' + PLACE.address) +
+      '&details=' + encodeURIComponent((m.what ? m.what + '\n' : '') + 'Lead: ' + m.lead + '\n' + LINKS.site);
   }
 
-  /* Schedule filter */
-  var fbtns = document.querySelectorAll('#schedule .filter button');
-  Array.prototype.forEach.call(fbtns, function (b) {
+  /* ---------- Schedule table ---------- */
+  var tbody = $('#sched');
+  tbody.innerHTML = meetings.map(function (m) {
+    if (m.off) return '<tr class="off" data-lead="OFF"><td class="num">–</td><td class="date">' + esc(short(m.date)) + '</td><td class="topic" colspan="4">' + esc(m.topic) + '</td></tr>';
+    var cls = m === next ? 'next' : (m.end < now ? 'done' : '');
+    return '<tr class="' + cls + '" data-lead="' + esc(m.lead) + '"><td class="num">' + m.n + '</td>' +
+      '<td class="date">' + esc(short(m.date)) + '<small>' + hm12(PLACE.start) + ' PM</small></td>' +
+      '<td class="topic">' + esc(m.topic) + (m === next ? '<span class="badge">Next up</span>' : '') + '</td>' +
+      '<td>' + esc(m.what) + '</td><td class="lead">' + esc(m.lead) + '</td>' +
+      '<td class="add">' + (m.end < now ? '' : '<a href="' + gcal(m) + '" target="_blank" rel="noopener" aria-label="Add ' + esc(m.topic) + ' to Google Calendar">+ Calendar</a>') + '</td></tr>';
+  }).join('');
+
+  /* ---------- Lead filter (built from TEAM) ---------- */
+  var lf = $('#lead-filter');
+  lf.innerHTML = '<button type="button" data-who="all" aria-pressed="true">Everyone</button>' +
+    TEAM.map(function (t) { return '<button type="button" data-who="' + esc(t.short) + '" aria-pressed="false">' + esc(t.short) + '</button>'; }).join('');
+  var leadBtns = $$('button', lf), rows = $$('tr', tbody);
+  leadBtns.forEach(function (b) {
     b.addEventListener('click', function () {
-      Array.prototype.forEach.call(fbtns, function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+      leadBtns.forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
       var who = b.getAttribute('data-who');
       rows.forEach(function (r) {
-        var lead = r.querySelector('.lead').textContent;
-        r.hidden = !(who === 'all' || lead.indexOf(who) > -1 || lead === 'Everyone');
+        var lead = r.getAttribute('data-lead');
+        r.hidden = !(who === 'all' || (lead !== 'OFF' && (lead.indexOf(who) > -1 || lead === 'Everyone')));
       });
+      setView('list');
     });
   });
 
-  /* Project timeline: mark past and current phase */
-  Array.prototype.forEach.call(document.querySelectorAll('#steps li'), function (li) {
-    var s = parse(li.getAttribute('data-start')), e = parse(li.getAttribute('data-end'));
-    if (e < today) li.classList.add('past');
-    else if (s <= today) li.classList.add('now');
-  });
+  /* ---------- Live countdown ---------- */
+  var chip = $('#next-chip'), wn = $('#where-next'), wc = $('#where-count');
+  function tick() {
+    var t = new Date(), nx = findNext(t);
+    if (!nx) { chip.textContent = 'See you next school year!'; wn.textContent = 'Season complete'; wc.textContent = ''; return; }
+    if (t >= nx.start) { chip.textContent = 'Happening now in Room 214'; wn.textContent = 'Right now'; wc.textContent = nx.topic; return; }
+    var ms = nx.start - t, d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), mi = Math.floor(ms % 36e5 / 6e4);
+    var left = d > 0 ? d + 'd ' + h + 'h ' + mi + 'm' : h > 0 ? h + 'h ' + mi + 'm' : mi + ' min';
+    chip.textContent = (nx === real[0] ? 'First meeting ' : 'Next meeting ') + short(nx.date) + ' · in ' + left;
+    wn.textContent = short(nx.date) + ', ' + hm12(PLACE.start) + ' PM';
+    wc.textContent = 'In ' + left + ' · ' + nx.topic;
+  }
+  tick(); setInterval(tick, 30000);
 
-  /* Projects gallery: filter + search */
-  var projs = Array.prototype.slice.call(document.querySelectorAll('#plist .proj'));
-  var pbtns = document.querySelectorAll('#pfilter button');
-  var psearch = document.getElementById('psearch'), pcount = document.getElementById('pcount'), pempty = document.getElementById('pempty');
-  var pstatus = 'all';
+  /* ---------- .ics download: every upcoming meeting, 30-min reminder ---------- */
+  function icsEsc(s) { return String(s).replace(/\\/g, '\\\\').replace(/[,;]/g, '\\$&'); }
+  function ics() {
+    var L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AI Scholars//BHS//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:AI Scholars',
+      'BEGIN:VTIMEZONE', 'TZID:America/New_York',
+      'BEGIN:DAYLIGHT', 'TZOFFSETFROM:-0500', 'TZOFFSETTO:-0400', 'TZNAME:EDT', 'DTSTART:19700308T020000', 'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU', 'END:DAYLIGHT',
+      'BEGIN:STANDARD', 'TZOFFSETFROM:-0400', 'TZOFFSETTO:-0500', 'TZNAME:EST', 'DTSTART:19701101T020000', 'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU', 'END:STANDARD',
+      'END:VTIMEZONE'];
+    var dtnow = stamp(new Date());
+    real.forEach(function (m) {
+      if (m.end < now) return;
+      L.push('BEGIN:VEVENT', 'UID:ais-' + stamp(m.start) + '@aischolarsclub.github.io', 'DTSTAMP:' + dtnow,
+        'DTSTART;TZID=America/New_York:' + stamp(m.start), 'DTEND;TZID=America/New_York:' + stamp(m.end),
+        'SUMMARY:' + icsEsc('AI Scholars: ' + m.topic),
+        'LOCATION:' + icsEsc(PLACE.room + ', ' + PLACE.address),
+        'DESCRIPTION:' + icsEsc((m.what ? m.what + ' ' : '') + '(Lead: ' + m.lead + ')'),
+        'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:AI Scholars in 30 minutes', 'END:VALARM', 'END:VEVENT');
+    });
+    L.push('END:VCALENDAR');
+    var blob = new Blob([L.join('\r\n')], { type: 'text/calendar' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ai-scholars-meetings.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    toast('Downloaded! Open the file to add every meeting to your calendar.');
+  }
+  $$('[data-ics]').forEach(function (b) { b.addEventListener('click', ics); });
+
+  /* ---------- List / calendar views ---------- */
+  var viewBtns = $$('[data-view]');
+  function setView(v) {
+    viewBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === v)); });
+    $('#view-list').hidden = v !== 'list'; $('#view-cal').hidden = v !== 'cal';
+    if (v === 'cal') drawCal();
+  }
+  viewBtns.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
+
+  var byDay = {};
+  meetings.forEach(function (m) { byDay[m.date.toDateString()] = m; });
+  var firstM = new Date(meetings[0].date.getFullYear(), meetings[0].date.getMonth(), 1);
+  var lastD = meetings[meetings.length - 1].date, lastM = new Date(lastD.getFullYear(), lastD.getMonth(), 1);
+  var focus = next ? next.date : (today < meetings[0].date ? meetings[0].date : lastD);
+  var calM = new Date(focus.getFullYear(), focus.getMonth(), 1);
+  if (calM < firstM) calM = firstM;
+  if (calM > lastM) calM = lastM;
+  function showDetail(m) {
+    var el = $('#cal-detail');
+    if (m.off) { el.innerHTML = '<strong>' + esc(long(m.date)) + '</strong><p>' + esc(m.topic) + '</p>'; return; }
+    el.innerHTML = '<strong>#' + m.n + ' · ' + esc(m.topic) + '</strong><p>' + esc(long(m.date)) + ' · ' + timeLabel + ' · ' + esc(PLACE.room) + '</p>' +
+      '<p>' + (m.what ? esc(m.what) + ' · ' : '') + 'Lead: ' + esc(m.lead) + '</p>' +
+      (m.end < now ? '' : '<p style="margin-top:6px"><a href="' + gcal(m) + '" target="_blank" rel="noopener">+ Add to Google Calendar</a></p>');
+  }
+  function drawCal() {
+    $('#cal-title').textContent = MONTH[calM.getMonth()] + ' ' + calM.getFullYear();
+    $('#cal-prev').disabled = calM <= firstM; $('#cal-next').disabled = calM >= lastM;
+    var html = DOW.map(function (d) { return '<div class="dow" aria-hidden="true">' + d.charAt(0) + '</div>'; }).join('');
+    var lead0 = calM.getDay(), days = new Date(calM.getFullYear(), calM.getMonth() + 1, 0).getDate();
+    for (var k = 0; k < lead0; k++) html += '<div class="day blank"></div>';
+    for (var d = 1; d <= days; d++) {
+      var dt = new Date(calM.getFullYear(), calM.getMonth(), d), m = byDay[dt.toDateString()];
+      var isToday = dt.getTime() === today.getTime() ? ' today' : '';
+      if (m) {
+        var st = m.off ? ' is-off' : m === next ? ' is-next' : m.end < now ? ' is-done' : '';
+        html += '<button type="button" class="day meet' + st + isToday + '" data-i="' + m.i + '" aria-pressed="false" aria-label="' + esc(long(dt) + ': ' + m.topic) + '">' + d + '</button>';
+      } else html += '<div class="day' + isToday + '">' + d + '</div>';
+    }
+    $('#cal-grid').innerHTML = html;
+    var btns = $$('#cal-grid .meet');
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        btns.forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+        showDetail(meetings[+b.getAttribute('data-i')]);
+      });
+    });
+    var pre = $('#cal-grid .is-next') || $('#cal-grid .meet:not(.is-done):not(.is-off)') || btns[0];
+    if (pre) pre.click(); else $('#cal-detail').innerHTML = '<p>No meetings this month.</p>';
+  }
+  $('#cal-prev').addEventListener('click', function () { calM = new Date(calM.getFullYear(), calM.getMonth() - 1, 1); drawCal(); });
+  $('#cal-next').addEventListener('click', function () { calM = new Date(calM.getFullYear(), calM.getMonth() + 1, 1); drawCal(); });
+
+  /* ---------- Project timeline ---------- */
+  $('#steps').innerHTML = TIMELINE.map(function (s) {
+    var a = parse(s[3]), b = parse(s[4]), cls = b < today ? 'past' : a <= today ? 'now' : '';
+    return '<li class="' + cls + '"><span class="when">' + esc(s[0]) + '</span><strong>' + esc(s[1]) + '</strong><span class="what">' + esc(s[2]) + '</span></li>';
+  }).join('');
+
+  /* ---------- Team cards (lesson chips come from MEETINGS) ---------- */
+  function chipLabel(t) {
+    t = t.split(/:| \+ /)[0];
+    if (t.length <= 26) return t;
+    var cut = t.slice(0, 26); return cut.slice(0, cut.lastIndexOf(' ')) + '…';
+  }
+  $('#team-list').innerHTML = TEAM.map(function (t) {
+    var mine = real.filter(function (m) { return m.lead.indexOf(t.short) > -1; });
+    var chips = mine.map(function (m) { return '<span>' + esc(chipLabel(m.topic)) + ' · ' + MON[m.date.getMonth()] + ' ' + m.date.getDate() + '</span>'; }).join('');
+    return '<div class="person reveal"><div class="avatar' + (t.founder ? ' founder' : '') + '" aria-hidden="true">' + esc(t.initials) + '</div>' +
+      '<div><h3>' + esc(t.name) + '</h3><div class="role">' + esc(t.role) + '</div>' + (chips ? '<div class="leads">' + chips + '</div>' : '') + '</div></div>';
+  }).join('');
+
+  /* ---------- Projects gallery ---------- */
+  var pillTxt = { live: 'Live', wip: 'In progress', open: 'Open slot' };
+  $('#plist').innerHTML = PROJECTS.map(function (p, k) {
+    var go = p.link ? '<a href="' + esc(p.link) + '" target="_blank" rel="noopener">Open project →</a>' : esc(p.note);
+    return '<article class="proj reveal' + (p.status === 'open' ? ' open' : '') + '" data-status="' + esc(p.status) + '">' +
+      '<div class="thumb" style="--x:' + (15 + (k * 37) % 70) + '%"><span>' + esc(p.badge) + '</span></div>' +
+      '<div class="body"><div class="meta"><span class="pill ' + esc(p.status) + '">' + esc(pillTxt[p.status] || p.status) + '</span><span class="pill">' + esc(p.tag) + '</span></div>' +
+      '<h3>' + esc(p.title) + '</h3><div class="who">' + esc(p.team) + '</div><p>' + esc(p.about) + '</p></div>' +
+      '<div class="go">' + go + '</div></article>';
+  }).join('');
+  var projs = $$('#plist .proj'), pbtns = $$('#pfilter button'), psearch = $('#psearch'), pstatus = 'all';
   function pupdate() {
-    var q = (psearch.value || '').trim().toLowerCase(), shown = 0;
+    var q = psearch.value.trim().toLowerCase(), shown = 0;
     projs.forEach(function (p) {
       var ok = (pstatus === 'all' || p.getAttribute('data-status') === pstatus) && (!q || p.textContent.toLowerCase().indexOf(q) > -1);
       p.hidden = !ok; if (ok) shown++;
     });
-    var real = projs.filter(function (p) { return p.getAttribute('data-status') !== 'open'; }).length;
-    pcount.textContent = real + (real === 1 ? ' project' : ' projects') + ' so far';
-    pempty.hidden = shown > 0;
+    var n = PROJECTS.filter(function (p) { return p.status !== 'open'; }).length;
+    $('#pcount').textContent = n + (n === 1 ? ' project' : ' projects') + ' so far';
+    $('#pempty').hidden = shown > 0;
   }
-  Array.prototype.forEach.call(pbtns, function (b) {
+  pbtns.forEach(function (b) {
     b.addEventListener('click', function () {
-      Array.prototype.forEach.call(pbtns, function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+      pbtns.forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
       pstatus = b.getAttribute('data-status'); pupdate();
     });
   });
-  psearch.addEventListener('input', pupdate);
-  pupdate();
+  psearch.addEventListener('input', pupdate); pupdate();
 
-  /* Active nav link + back-to-top */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]:not(.nav-cta)'));
-  var totop = document.getElementById('totop');
-  totop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
-  var ticking = false;
-  function onScroll() {
-    ticking = false;
-    totop.classList.toggle('show', window.scrollY > 700);
-    var y = window.scrollY + 120, cur = null;
-    navLinks.forEach(function (a) { var s = document.querySelector(a.getAttribute('href')); if (s && s.offsetTop <= y) cur = a; });
-    navLinks.forEach(function (a) { a.classList.toggle('active', a === cur); });
+  /* ---------- Try-it tabs ---------- */
+  var tabs = $$('[role="tab"]');
+  function selectTab(tb) {
+    tabs.forEach(function (t) {
+      var on = t === tb; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+      $('#' + t.getAttribute('aria-controls')).hidden = !on;
+    });
   }
-  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  onScroll();
+  tabs.forEach(function (t, k) {
+    t.addEventListener('click', function () { selectTab(t); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { var n = tabs[(k + d + tabs.length) % tabs.length]; selectTab(n); n.focus(); e.preventDefault(); }
+    });
+  });
 
-  /* Quiz */
-  var cards = document.querySelectorAll('#quiz .q');
-  var score = document.getElementById('score');
+  /* ---------- Quiz ---------- */
+  var cards = $$('#quiz .q'), score = $('#score'), meter = $('#meter');
   function tally() {
-    var answered = document.querySelectorAll('#quiz .q.right, #quiz .q.wrong').length;
-    var right = document.querySelectorAll('#quiz .q.right').length;
+    var answered = $$('#quiz .q.right, #quiz .q.wrong').length, right = $$('#quiz .q.right').length;
+    meter.style.width = (answered / cards.length * 100) + '%';
     score.textContent = answered < cards.length ? answered + ' of ' + cards.length + ' answered' :
-      'You got ' + right + ' of ' + cards.length + (right === cards.length ? '. Perfect!' : right >= 4 ? '. Nice work.' : '. Come to lesson 1!');
+      'You got ' + right + ' of ' + cards.length + (right === cards.length ? '. Perfect!' : right >= 4 ? '. Nice work.' : '. Come to the first meeting!');
   }
-  Array.prototype.forEach.call(cards, function (q) {
-    var why = q.querySelector('.why');
-    Array.prototype.forEach.call(q.querySelectorAll('button'), function (b) {
+  cards.forEach(function (q) {
+    var why = $('.why', q); why.setAttribute('data-text', why.textContent);
+    $$('button', q).forEach(function (b) {
       b.addEventListener('click', function () {
         var ok = b.getAttribute('data-pick') === q.getAttribute('data-answer');
-        q.classList.add(ok ? 'right' : 'wrong');
-        b.classList.add('picked');
-        Array.prototype.forEach.call(q.querySelectorAll('button'), function (x) { x.disabled = true; });
-        why.innerHTML = '<span class="verdict">' + (ok ? 'Right.' : 'Not quite.') + '</span> ' + why.getAttribute('data-text');
-        why.hidden = false;
-        tally();
+        q.classList.add(ok ? 'right' : 'wrong'); b.classList.add('picked');
+        $$('button', q).forEach(function (x) { x.disabled = true; });
+        why.innerHTML = '<span class="verdict">' + (ok ? 'Right.' : 'Not quite.') + '</span> ' + esc(why.getAttribute('data-text'));
+        why.hidden = false; tally();
       });
     });
-    why.setAttribute('data-text', why.textContent);
   });
-  document.getElementById('reset').addEventListener('click', function () {
-    Array.prototype.forEach.call(cards, function (q) {
+  $('#reset').addEventListener('click', function () {
+    cards.forEach(function (q) {
       q.classList.remove('right', 'wrong');
-      var why = q.querySelector('.why'); why.hidden = true; why.textContent = why.getAttribute('data-text');
-      Array.prototype.forEach.call(q.querySelectorAll('button'), function (x) { x.disabled = false; x.classList.remove('picked'); });
+      var why = $('.why', q); why.hidden = true; why.textContent = why.getAttribute('data-text');
+      $$('button', q).forEach(function (x) { x.disabled = false; x.classList.remove('picked'); });
     });
     tally();
   });
 
-  /* Notes -> study guide demo */
+  /* ---------- Prompt builder ---------- */
+  var TASKS = {
+    guide: ['Turn my class notes (pasted below) into a study guide', 'Organize it by main idea, define every key term, and add 3 practice questions at the end. Flag anything in my notes that looks wrong or unclear instead of guessing.'],
+    quiz: ['Quiz me before my test', 'Ask me one question at a time and wait for my answer. Mix easy and hard questions. If I get one wrong, explain why before moving on.'],
+    explain: ['Explain this so I actually understand it', 'Start with the big idea in one sentence, then go deeper. Check my understanding with one question at the end.'],
+    check: ['Check my answers (pasted below) for mistakes', "Don't give me the right answers. Point out which ones are wrong and give me a hint so I can fix them myself."],
+    plan: ['Make me a study plan for my test', 'Split it into short sessions over the next week, with what to review and how to test myself each day.']
+  };
+  var STYLE = { simple: 'Keep it simple and short, using bullet points.', examples: 'Use real-world examples and analogies.', steps: 'Go step by step, numbered.' };
+  var pbOut = $('#pb-out');
+  function buildPrompt() {
+    var t = TASKS[$('#pb-task').value], topic = $('#pb-topic').value.trim() || 'my class topic';
+    var parts = [
+      ['Who I am', "I'm a " + $('#pb-level').value + ' student at Brookline High School.'],
+      ['What I want', t[0] + '. Topic: ' + topic + '.'],
+      ['Details', t[1]],
+      ['Format', STYLE[$('#pb-style').value]]
+    ];
+    pbOut.innerHTML = parts.map(function (p) { return '<mark>' + p[0] + ':</mark> ' + esc(p[1]); }).join('\n\n');
+    pbOut.setAttribute('data-plain', parts.map(function (p) { return p[1]; }).join('\n\n'));
+  }
+  ['#pb-task', '#pb-topic', '#pb-level', '#pb-style'].forEach(function (s) { $(s).addEventListener('input', buildPrompt); $(s).addEventListener('change', buildPrompt); });
+  buildPrompt();
+  function copyText(txt, done) {
+    function fallback() { var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+  }
+  $('#pb-copy').addEventListener('click', function () {
+    copyText(pbOut.getAttribute('data-plain'), function () { var c = $('#pb-copied'); c.hidden = false; setTimeout(function () { c.hidden = true; }, 1800); });
+  });
+
+  /* ---------- Notes -> study guide demo ---------- */
   var guideItems = [
     ['1', 'Glycolysis', 'Cytoplasm · no oxygen needed · glucose → 2 pyruvate · 2 ATP'],
     ['2', 'Krebs cycle', 'Mitochondrial matrix · releases CO₂ · makes NADH and FADH₂'],
@@ -751,23 +1113,56 @@ ASK about chemiosmosis on quiz??</pre>
     ['!', 'No oxygen?', 'Fermentation: lactic acid (muscles) or alcohol (yeast)'],
     ['?', 'Check with your teacher', 'Chemiosmosis isn’t explained in your notes. Ask before the quiz.']
   ];
-  var guide = document.getElementById('guide'), run = document.getElementById('run'), timers = [];
+  var guide = $('#guide'), run = $('#run'), timers = [];
   run.addEventListener('click', function () {
-    timers.forEach(clearTimeout); timers = [];
-    guide.innerHTML = '';
-    guideItems.forEach(function (g, i) {
+    timers.forEach(clearTimeout); timers = []; guide.innerHTML = '';
+    guideItems.forEach(function (g, k) {
       timers.push(setTimeout(function () {
         var li = document.createElement('li');
         li.innerHTML = '<span class="n' + (/[!?]/.test(g[0]) ? ' flag' : '') + '">' + g[0] + '</span><div><b>' + g[1] + '</b><span>' + g[2] + '</span></div>';
         guide.appendChild(li);
-      }, reduce ? 0 : 380 * (i + 1)));
+      }, reduce ? 0 : 380 * (k + 1)));
     });
     run.textContent = 'Run it again';
   });
 
-  /* Typed headline */
-  var rot = document.getElementById('rot');
-  var words = ['Study smarter', 'Quiz yourself', 'Build websites', 'Think critically'];
+  /* ---------- Share button ---------- */
+  $('#share-btn').addEventListener('click', function () {
+    var data = { title: 'AI Scholars at BHS', text: 'Join AI Scholars: study smarter with AI. Every X block in Room 214.', url: LINKS.site };
+    if (navigator.share) navigator.share(data).catch(function () {});
+    else copyText(LINKS.site, function () { toast('Link copied: ' + LINKS.site); });
+  });
+
+  /* ---------- Theme toggle ---------- */
+  function isDark() { var t = root.getAttribute('data-theme'); return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
+  $('#theme-btn').addEventListener('click', function () {
+    var t = isDark() ? 'light' : 'dark'; root.setAttribute('data-theme', t);
+    try { localStorage.setItem('ais-theme', t); } catch (e) {}
+    if (window.__netColors) window.__netColors();
+  });
+
+  /* ---------- Mobile menu ---------- */
+  var nav = $('#nav'), menuBtn = $('#menu-btn');
+  function setMenu(open) { nav.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', String(open)); menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu'); }
+  menuBtn.addEventListener('click', function () { setMenu(!nav.classList.contains('open')); });
+  $$('#site-nav a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+
+  /* ---------- Active nav link + back to top ---------- */
+  var navLinks = $$('#site-nav a[href^="#"]'), totop = $('#totop'), ticking = false;
+  totop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+  function onScroll() {
+    ticking = false;
+    totop.classList.toggle('show', window.scrollY > 700);
+    var y = window.scrollY + 120, cur = null;
+    navLinks.forEach(function (a) { var s = $(a.getAttribute('href')); if (s && s.getBoundingClientRect().top + window.scrollY <= y) cur = a; });
+    navLinks.forEach(function (a) { a.classList.toggle('active', a === cur); });
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+
+  /* ---------- Typed headline ---------- */
+  var rot = $('#rot'), words = ['Study smarter', 'Quiz yourself', 'Build websites', 'Think critically'];
   if (!reduce && rot) {
     var wi = 0;
     var step = function () {
@@ -786,7 +1181,7 @@ ASK about chemiosmosis on quiz??</pre>
     setTimeout(step, 2600);
   }
 
-  /* Scroll reveals and count-ups (content stays visible without JS) */
+  /* ---------- Scroll reveals + count-ups ---------- */
   if (!reduce && 'IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
@@ -795,11 +1190,8 @@ ASK about chemiosmosis on quiz??</pre>
         var el = e.target;
         if (el.hasAttribute('data-count')) {
           var n = +el.getAttribute('data-count'), t0 = performance.now();
-          var tick = function (t) {
-            var k = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - k, 3)));
-            if (k < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
+          var f = function (t) { var k = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); };
+          requestAnimationFrame(f);
         } else {
           var sib = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
           el.style.animationDelay = Math.min(sib, 6) * 60 + 'ms';
@@ -807,70 +1199,59 @@ ASK about chemiosmosis on quiz??</pre>
         }
       });
     }, { rootMargin: '0px 0px 60px 0px' });
-    Array.prototype.forEach.call(document.querySelectorAll('.reveal, [data-count]'), function (el) {
-      if (el.getBoundingClientRect().top < window.innerHeight - 40) return; // already on screen: leave as is
+    $$('.reveal, [data-count]').forEach(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight - 40) return;
       io.observe(el);
     });
   }
 
-  /* Hero network canvas */
-  var cv = document.getElementById('net'), hero = document.getElementById('top');
+  /* ---------- Hero "neural network" animation ---------- */
+  var cv = $('#net'), hero = $('#top');
   if (cv && cv.getContext) {
-    var ctx = cv.getContext('2d'), pts = [], W = 0, H = 0, dpr = 1, mouse = null, running = true, line = '185,196,220', red = '200,16,46';
+    var ctx = cv.getContext('2d'), pts = [], W = 0, H = 0, mouse = null, running = true, line = '185,196,220', red = '200,16,46';
     var readColors = function () {
-      var cs = getComputedStyle(document.documentElement);
-      var hex = function (v, fb) { v = (v || '').trim(); if (!/^#[0-9a-f]{6}$/i.test(v)) return fb; return [1, 3, 5].map(function (i) { return parseInt(v.substr(i, 2), 16); }).join(','); };
+      var cs = getComputedStyle(root);
+      var hex = function (v, fb) { v = (v || '').trim(); if (!/^#[0-9a-f]{6}$/i.test(v)) return fb; return [1, 3, 5].map(function (k) { return parseInt(v.substr(k, 2), 16); }).join(','); };
       line = hex(cs.getPropertyValue('--on-navy-muted'), line); red = hex(cs.getPropertyValue('--red'), red);
-    };
-    var size = function () {
-      dpr = Math.min(2, window.devicePixelRatio || 1);
-      W = hero.clientWidth; H = hero.clientHeight;
-      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.max(18, Math.min(70, Math.round(W * H / 16000)));
-      pts = [];
-      for (var i = 0; i < n; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() < 0.12 });
-      readColors(); draw();
     };
     var draw = function () {
       ctx.clearRect(0, 0, W, H);
       var D = 130;
-      for (var i = 0; i < pts.length; i++) {
-        var a = pts[i];
-        for (var j = i + 1; j < pts.length; j++) {
-          var b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-          if (d < D) { ctx.strokeStyle = 'rgba(' + line + ',' + (0.22 * (1 - d / D)).toFixed(3) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      for (var a = 0; a < pts.length; a++) {
+        var p = pts[a];
+        for (var b = a + 1; b < pts.length; b++) {
+          var q = pts[b], dx = p.x - q.x, dy = p.y - q.y, dd = Math.sqrt(dx * dx + dy * dy);
+          if (dd < D) { ctx.strokeStyle = 'rgba(' + line + ',' + (0.22 * (1 - dd / D)).toFixed(3) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
         }
         if (mouse) {
-          var mx = a.x - mouse.x, my = a.y - mouse.y, md = Math.sqrt(mx * mx + my * my);
-          if (md < 170) { ctx.strokeStyle = 'rgba(' + red + ',' + (0.5 * (1 - md / 170)).toFixed(3) + ')'; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
+          var mx = p.x - mouse.x, my = p.y - mouse.y, md = Math.sqrt(mx * mx + my * my);
+          if (md < 170) { ctx.strokeStyle = 'rgba(' + red + ',' + (0.5 * (1 - md / 170)).toFixed(3) + ')'; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
         }
       }
-      pts.forEach(function (p) {
-        ctx.fillStyle = p.r ? 'rgba(' + red + ',0.9)' : 'rgba(' + line + ',0.55)';
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r ? 2.6 : 1.8, 0, Math.PI * 2); ctx.fill();
-      });
+      pts.forEach(function (p) { ctx.fillStyle = p.r ? 'rgba(' + red + ',0.9)' : 'rgba(' + line + ',0.55)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r ? 2.6 : 1.8, 0, Math.PI * 2); ctx.fill(); });
+    };
+    window.__netColors = function () { readColors(); draw(); };
+    var size = function () {
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = hero.clientWidth; H = hero.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(18, Math.min(70, Math.round(W * H / 16000)));
+      pts = [];
+      for (var k = 0; k < n; k++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35, r: Math.random() < 0.12 });
+      readColors(); draw();
     };
     var loop = function () {
       if (!running) return;
-      pts.forEach(function (p) {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
-      });
+      pts.forEach(function (p) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; });
       draw(); requestAnimationFrame(loop);
     };
     size();
-    window.addEventListener('resize', size);
-    if (window.matchMedia) {
-      var mq = matchMedia('(prefers-color-scheme: dark)');
-      if (mq.addEventListener) mq.addEventListener('change', function () { readColors(); draw(); });
-    }
+    var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(size, 150); });
+    if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', window.__netColors); }
     if (!reduce) {
       hero.addEventListener('pointermove', function (e) { var r = hero.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
       hero.addEventListener('pointerleave', function () { mouse = null; });
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (es) { var v = es[0].isIntersecting; if (v && !running) { running = true; loop(); } else if (!v) running = false; }).observe(hero);
-      }
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var v = es[0].isIntersecting; if (v && !running) { running = true; loop(); } else if (!v) running = false; }).observe(hero);
       loop();
     }
   }
