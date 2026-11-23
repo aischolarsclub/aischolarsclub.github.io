@@ -406,7 +406,7 @@ footer .wrap { padding-block: 22px 30px; color: var(--muted); font-size: 0.88rem
   <div class="stats" aria-label="Club at a glance">
     <div class="stat"><b data-count="7">7</b><span>members so far</span></div>
     <div class="stat"><b id="stat-meetings" data-count="24">24</b><span>meetings this year</span></div>
-    <div class="stat"><b id="stat-team" data-count="6">6</b><span>student leaders</span></div>
+    <div class="stat"><b id="stat-team" data-count="4">4</b><span>student leaders</span></div>
     <div class="stat"><b data-count="1">1</b><span>big website project</span></div>
   </div>
 
@@ -727,16 +727,16 @@ var PLACE = {
 var MEETINGS = [
   ["2026-11-04", "Kickoff: what AI is good and bad at", "Live demo, ground rules, vote on topics", "Guy, Jayden, Vid"],
   ["2026-11-13", "Prompting that works", "Rewrite weak prompts using the four parts of a good one", "Vid"],
-  ["2026-11-23", "Study guides from your notes", "Turn real notes into a guide; check it for errors", "Xavier"],
+  ["2026-11-23", "Study Guide Lab: turn your notes into a game", "Build a study game from your notes, then climb the arcade leaderboard", "Guy, Jayden, Xavier, Vid"],
   ["2026-12-03", "No X block: early release day", "", "OFF"],
   ["2026-12-11", "Practice quizzes and flashcards", "Make a quiz, then hunt for bad questions", "Jayden"],
   ["2026-12-21", "Organizing your classes with Projects", "Set up one class with its syllabus and notes. Holiday snacks!", "Guy"],
-  ["2027-01-07", "Spot the mistake: AI awareness", "Real or AI? Catch confident wrong answers", "Tagir, Iddo"],
+  ["2027-01-07", "Spot the mistake: AI awareness", "Real or AI? Catch confident wrong answers", "Xavier"],
   ["2027-01-15", "Hand-built vs AI-built: the website showdown", "Vid's hand-coded site vs. the AI-built one", "Vid"],
   ["2027-01-26", "Midterm prep sprint", "A real study plan for your hardest midterm", "Xavier"],
   ["2027-02-03", "Vibe coding + website project kickoff", "Build a flashcard page just by describing it", "Jayden"],
   ["2027-02-11", "Reusable instructions and skills", "Write a 'quiz me' setup; project groups form", "Guy"],
-  ["2027-02-26", "Building with Claude Code", "Add a feature step by step; groups plan their sites", "Tagir, Iddo"],
+  ["2027-02-26", "Building with Claude Code", "Add a feature step by step; groups plan their sites", "Vid"],
   ["2027-03-08", "Project work: first version", "Groups build their topic explanation; officers check in with each group", "Everyone"],
   ["2027-03-17", "Midpoint check-in", "2-minute progress demos and feedback", "Everyone"],
   ["2027-03-25", "AI and the businesses of the future", "How companies use AI, which jobs it's changing, and startup ideas", "Guy, Jayden"],
@@ -774,11 +774,7 @@ var TEAM = [
   { name: "Xavier Wu", short: "Xavier", initials: "XW", founder: true,
     role: "Co-founder · Secretary · Workshop lead: study guides and midterm prep" },
   { name: "Vid Rajlic", short: "Vid", initials: "VR", founder: true,
-    role: "Co-founder · Secretary · Website designer · Workshop lead: Claude Code" },
-  { name: "Tagir Parchiev", short: "Tagir", initials: "TP", founder: false,
-    role: "Co-Director of Workshops" },
-  { name: "Iddo Schubert", short: "Iddo", initials: "IS", founder: false,
-    role: "Co-Director of Workshops" }
+    role: "Co-founder · Secretary · Website designer · Workshop lead: Claude Code" }
 ];
 
 /* PROJECTS: status is "live", "wip" (in progress), or "open" (empty slot).
@@ -787,6 +783,9 @@ var PROJECTS = [
   { title: "The AI Scholars website", team: "Guy Berkovitz · Vid Rajlic", tag: "Club", status: "live", badge: "AI",
     about: "This site. Built with AI help: a live schedule, a prompt builder, a quiz, and this projects page.",
     link: "https://aischolarsclub.github.io/", note: "" },
+  { title: "Zombie Survival: Easy Math", team: "AI Scholars officers", tag: "Game", status: "live", badge: "ZS",
+    about: "A study game built from one page of notes. Search the school by day, hold the barricade by night, and beat the Tank on night 7. From Study Guide Lab.",
+    link: "https://claude.ai/artifact/GJAM2B8B2sJfsW5dNXRcbW", note: "" },
   { title: "Hand-built vs AI-built showdown", team: "Vid Rajlic", tag: "Coding", status: "wip", badge: "VS",
     about: "The same website built twice, once by hand and once with AI, compared side by side.",
     link: "", note: "Demo on Jan 15" },
